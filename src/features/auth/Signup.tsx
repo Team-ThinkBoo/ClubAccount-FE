@@ -1,3 +1,4 @@
+import AuthActionInput from "../../components/AuthActionInput";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 
@@ -11,12 +12,16 @@ const Signup = () => {
 
       <div className="flex flex-col w-full gap-3 mt-8">
         <AuthInput type="text" placeholder="조직명" />
-        <div className="flex gap-2">
-          <AuthInput type="text" placeholder="이메일" />
-          <button className="px-4 py-3 rounded-lg text-primary-var1 bg-primary-var2 caption-med-12 whitespace-nowrap">
-            인증하기
-          </button>
-        </div>
+
+        <AuthActionInput
+          buttonText="인증하기"
+          inputProps={{ placeholder: "이메일", name: "email" }}
+        />
+        <AuthActionInput
+          buttonText="확인"
+          inputProps={{ placeholder: "인증번호", name: "authCode" }}
+        />
+
         <AuthInput type="password" placeholder="비밀번호" />
         <AuthInput type="password" placeholder="비밀번호 확인" />
       </div>
