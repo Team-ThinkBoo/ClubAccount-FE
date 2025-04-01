@@ -4,6 +4,7 @@ import TermsModal from "./TermsModal";
 import AuthLink from "./AuthLink";
 import Button from "../../components/Button";
 import AuthInput from "./AuthInput";
+import LogoIcon from "../../icons/LogoIcon";
 
 const Login = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -19,7 +20,7 @@ const Login = () => {
   return (
     <>
       <TermsModal open={openModal} onCloseModal={handleCloseModal} />
-      <h1 className="text-3xl font-extrabold text-primary">띵부</h1>
+      <LogoIcon className="w-16 h-[35px]" />
 
       <div className="flex flex-col items-center justify-center w-full gap-3 mt-16">
         <AuthInput type="text" placeholder="이메일" />

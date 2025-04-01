@@ -2,6 +2,7 @@ import Modal from "../../components/Modal";
 import { Link } from "react-router-dom";
 import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 import Button from "../../components/Button";
+import LogoIcon from "../../icons/LogoIcon";
 
 interface TermsModalProps {
   open: boolean;
@@ -12,7 +13,7 @@ const TermsModal = ({ open, onCloseModal }: TermsModalProps) => {
   return (
     <Modal open={open} onClose={onCloseModal}>
       <div className="flex flex-col items-center gap-4 p-6 bg-white max-w-[370px] justify-center rounded-xl">
-        <h1 className="text-3xl font-extrabold text-primary">띵부</h1>
+        <LogoIcon className="w-16 h-[35px]" />
         <h2 className="text-base font-semibold">약관 동의</h2>
         <div className="flex flex-col gap-4 caption-med-12">
           <p>
