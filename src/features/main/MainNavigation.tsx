@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import NavList from "../../components/NavList";
 
 const menuList = [
@@ -12,7 +13,7 @@ const MainNavigation = () => {
       <nav className="flex justify-between w-full h-full">
         <div className="flex items-center justify-center px-6">
           <h1 className="text-2xl font-extrabold text-primary">
-            <p>띵부</p>
+            <Link to={"/12"}>띵부</Link>
           </h1>
         </div>
         <ul className="flex flex-1 justify-evenly">

@@ -5,11 +5,16 @@ import { useState } from "react";
 import BillIcon from "../../icons/BillIcon";
 import AddModal from "./AddModal";
 import { AddModalType } from "../../types/types";
+import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 
 const TimelineHeader = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openAddMenu, setOpenAddMenu] = useState(false);
   const [modalType, setModalType] = useState<AddModalType>("self");
+  const [date, setDate] = useState<DateValueType>({
+    startDate: null,
+    endDate: null
+  });
 
   const handleOpenModal = (type: AddModalType) => {
     setModalType(type);
@@ -34,8 +39,23 @@ const TimelineHeader = () => {
 
         <div className="flex justify-between px-6">
           <div className="flex items-center justify-center gap-2">
-            <p>2024년 2월</p>
-            <ArrowDownIcon />
+            <Datepicker
+              inputName="date"
+              inputClassName="p-0 w-60"
+              containerClassName={"relative"}
+              popupClassName={
+                "transition-all ease-out duration-300 absolute z-10 mt-[1px] text-sm lg:text-xs 2xl:text-sm translate-y-4 opacity-0 hidden min-w-[296px]"
+              }
+              popoverDirection="down"
+              readOnly
+              i18n={"ko"}
+              placeholder="기간 선택"
+              useRange={false}
+              primaryColor="amber"
+              value={date}
+              onChange={(newValue) => setDate(newValue)}
+              toggleIcon={() => <ArrowDownIcon />}
+            />
           </div>
 
           <div className="relative">
