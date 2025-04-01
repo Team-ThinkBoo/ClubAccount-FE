@@ -1,11 +1,11 @@
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import Input from "../../components/Input";
 import Modal from "../../components/Modal";
 import Selector from "../../components/Selector";
 import { AddModalType } from "../../types/types";
 import CameraIcon from "../../icons/CameraIcon";
 import FolderIcon from "../../icons/FolderIcon";
-import SingleDateInput from "../../components/SingleDateInput";
+import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 
 type categoryType = "회식비" | "용품 구매비" | "정기 구독비" | "대관비" | "기타";
 
@@ -18,6 +18,11 @@ interface AddModalProps {
 }
 
 const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
+  const [value, setValue] = useState<DateValueType>({
+    startDate: null,
+    endDate: null
+  });
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
@@ -55,7 +60,19 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
               </div>
             )}
             <Selector selectTitle={"카테고리"} selectList={category} name="category" />
-            <SingleDateInput name="date" />
+            <Datepicker
+              inputName="date"
+              inputClassName="w-full h-10 gap-1 px-4 border body-med-14 text-gray-01 rounded-xl border-gray-05 focus:outline-0"
+              popoverDirection="down"
+              readOnly
+              i18n={"ko"}
+              placeholder="날짜"
+              useRange={false}
+              asSingle={true}
+              primaryColor="amber"
+              value={value}
+              onChange={(newValue) => setValue(newValue)}
+            />
             <Input placeholder="상호명" name="store_name" />
             <Input placeholder="금액" name="amount" />
             <Input placeholder="메모" name="etc" />
