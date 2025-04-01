@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 import AuthActionInput from "../../components/AuthActionInput";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 
-const Signup = () => {
+const ChangePW = () => {
   return (
     <>
       <h1 className="flex flex-wrap items-center justify-center whitespace-pre title-extra-18 text-gray-01">
@@ -11,8 +12,6 @@ const Signup = () => {
       </h1>
 
       <div className="flex flex-col w-full gap-3 mt-8">
-        <AuthInput type="text" placeholder="조직명" />
-
         <AuthActionInput
           buttonText="인증하기"
           inputProps={{ placeholder: "이메일", name: "email" }}
@@ -30,10 +29,12 @@ const Signup = () => {
       </div>
 
       <div className="flex flex-col items-center w-full gap-4 mt-12">
-        <AuthButton>회원가입</AuthButton>
+        <Link to={"/auth"} className="w-full">
+          <AuthButton>확인</AuthButton>
+        </Link>
       </div>
     </>
   );
 };
 
-export default Signup;
+export default ChangePW;

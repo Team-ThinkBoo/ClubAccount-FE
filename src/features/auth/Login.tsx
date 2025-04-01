@@ -30,7 +30,7 @@ const Login = () => {
         <AuthButton>로그인</AuthButton>
 
         <div className="flex gap-8 w-full px-[60px] justify-between">
-          <AuthLink to={`?mode=${AUTH_SEARCH_PARAMS.FIND_PW}`}>비밀번호 변경</AuthLink>
+          <AuthLink to={`?mode=${AUTH_SEARCH_PARAMS.CHANGE_PW}`}>비밀번호 변경</AuthLink>
           <button className="caption-med-12 text-grey-03" onClick={handleOpenModal}>
             회원가입
           </button>
