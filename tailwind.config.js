@@ -7,6 +7,10 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        mid: "853px",
+        "lg-mid": "1224px"
+      },
       colors: {
         primary: "#FFD563",
         "primary-var1": "#FBC020",

@@ -7,7 +7,7 @@ interface TimelineContentCardProps {
 
 const TimelineContentCard = ({ receipt }: TimelineContentCardProps) => {
   return (
-    <li className="flex w-full gap-4 p-4 border h-1/3 rounded-2xl border-gray-05">
+    <li className="flex h-[162px] min-w-[312px] w-full max-w-[536px] gap-4 p-4 border rounded-2xl border-gray-05 mid:min-w-[320px] mid:max-w-[487px] mid:w-full lg-mid:w-[320px]">
       <div className="flex flex-col gap-4 justify-between w-[calc(75%-1rem)]">
         <div>
           <p className="body-bold-14 text-gray-01">{receipt.date.toString()}</p>

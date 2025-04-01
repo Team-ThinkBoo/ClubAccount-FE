@@ -12,15 +12,17 @@ const MainPage = () => {
   return (
     <div className="flex flex-col h-full">
       <ProfileOverview />
-      <TimelineHeader />
-      <Suspense fallback={<SpinnerIcon />}>
-        <Await
-          errorElement={<p className="m-auto">데이터를 불러오는데 실패하였습니다.</p>}
-          resolve={data}
-        >
-          {(receipts) => <TimelineContents receipts={receipts} />}
-        </Await>
-      </Suspense>
+      <div className="w-full md:px-[76px] lg:px-[100px] flex flex-col items-center">
+        <TimelineHeader />
+        <Suspense fallback={<SpinnerIcon />}>
+          <Await
+            errorElement={<p className="m-auto">데이터를 불러오는데 실패하였습니다.</p>}
+            resolve={data}
+          >
+            {(receipts) => <TimelineContents receipts={receipts} />}
+          </Await>
+        </Suspense>
+      </div>
     </div>
   );
 };
