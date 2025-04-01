@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import AuthActionInput from "../../components/AuthActionInput";
-import AuthButton from "../../components/AuthButton";
-import AuthInput from "../../components/AuthInput";
+import AuthActionInput from "./AuthActionInput";
+import Button from "../../components/Button";
+import AuthInput from "./AuthInput";
 
 const ChangePW = () => {
   return (
@@ -30,7 +30,7 @@ const ChangePW = () => {
 
       <div className="flex flex-col items-center w-full gap-4 mt-12">
         <Link to={"/auth"} className="w-full">
-          <AuthButton>확인</AuthButton>
+          <Button>확인</Button>
         </Link>
       </div>
     </>

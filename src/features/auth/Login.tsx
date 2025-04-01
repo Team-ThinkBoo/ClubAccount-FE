@@ -1,9 +1,9 @@
 import { useState } from "react";
-import AuthButton from "../../components/AuthButton";
-import AuthInput from "../../components/AuthInput";
-import AuthLink from "../../components/AuthLink";
 import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 import TermsModal from "./TermsModal";
+import AuthLink from "./AuthLink";
+import Button from "../../components/Button";
+import AuthInput from "./AuthInput";
 
 const Login = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -27,7 +27,7 @@ const Login = () => {
       </div>
 
       <div className="flex flex-col items-center w-full gap-4 mt-12">
-        <AuthButton>로그인</AuthButton>
+        <Button>로그인</Button>
 
         <div className="flex gap-8 w-full px-[60px] justify-between">
           <AuthLink to={`?mode=${AUTH_SEARCH_PARAMS.CHANGE_PW}`}>비밀번호 변경</AuthLink>

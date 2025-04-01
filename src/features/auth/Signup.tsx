@@ -1,6 +1,6 @@
-import AuthActionInput from "../../components/AuthActionInput";
-import AuthButton from "../../components/AuthButton";
-import AuthInput from "../../components/AuthInput";
+import Button from "../../components/Button";
+import AuthActionInput from "./AuthActionInput";
+import AuthInput from "./AuthInput";
 
 const Signup = () => {
   return (
@@ -30,7 +30,7 @@ const Signup = () => {
       </div>
 
       <div className="flex flex-col items-center w-full gap-4 mt-12">
-        <AuthButton>회원가입</AuthButton>
+        <Button>회원가입</Button>
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 import Modal from "../../components/Modal";
 import { Link } from "react-router-dom";
-import AuthButton from "../../components/AuthButton";
 import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
+import Button from "../../components/Button";
 
 interface TermsModalProps {
   open: boolean;
@@ -39,7 +39,7 @@ const TermsModal = ({ open, onCloseModal }: TermsModalProps) => {
           </p>
         </div>
         <Link className="w-full" to={`?mode=${AUTH_SEARCH_PARAMS.SIGNUP}`}>
-          <AuthButton>동의합니다</AuthButton>
+          <Button>동의합니다</Button>
         </Link>
       </div>
     </Modal>
