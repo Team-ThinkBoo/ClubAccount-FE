@@ -11,7 +11,7 @@ interface TermsModalProps {
 const TermsModal = ({ open, onCloseModal }: TermsModalProps) => {
   return (
     <Modal open={open} onClose={onCloseModal}>
-      <div className="flex flex-col items-center gap-4 p-6 bg-white">
+      <div className="flex flex-col items-center gap-4 p-6 bg-white max-w-[370px] justify-center rounded-xl">
         <h1 className="text-3xl font-extrabold text-primary">띵부</h1>
         <h2 className="text-base font-semibold">약관 동의</h2>
         <div className="flex flex-col gap-4 caption-med-12">
@@ -38,7 +38,10 @@ const TermsModal = ({ open, onCloseModal }: TermsModalProps) => {
             필요한 경우 이에 따라 처리됩니다.
           </p>
         </div>
-        <Link className="w-full" to={`?mode=${AUTH_SEARCH_PARAMS.SIGNUP}`}>
+        <Link
+          className="flex items-center justify-center w-full mt-4"
+          to={`?mode=${AUTH_SEARCH_PARAMS.SIGNUP}`}
+        >
           <Button>동의합니다</Button>
         </Link>
       </div>

@@ -29,7 +29,7 @@ const Login = () => {
       <div className="flex flex-col items-center w-full gap-4 mt-12">
         <Button>로그인</Button>
 
-        <div className="flex gap-8 w-full px-[60px] justify-between">
+        <div className="flex w-full px-[60px] justify-between caption-med-12 text-gray-03">
           <AuthLink to={`?mode=${AUTH_SEARCH_PARAMS.CHANGE_PW}`}>비밀번호 변경</AuthLink>
           <button className="caption-med-12 text-grey-03" onClick={handleOpenModal}>
             회원가입
