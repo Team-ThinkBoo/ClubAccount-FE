@@ -5,12 +5,12 @@ import AuthInput from "./AuthInput";
 const Signup = () => {
   return (
     <>
-      <h1 className="flex flex-wrap items-center justify-center whitespace-pre title-extra-18 text-gray-01">
+      <h1 className="flex flex-col items-center justify-center whitespace-pre title-extra-18 text-gray-01">
         <span>지금 가입하여 </span>
         <span>투명하게 공유해 보세요</span>
       </h1>
 
-      <div className="flex flex-col w-full gap-3 mt-8">
+      <div className="flex flex-col items-center justify-center w-full gap-3 mt-8">
         <AuthInput type="text" placeholder="조직명" />
 
         <AuthActionInput

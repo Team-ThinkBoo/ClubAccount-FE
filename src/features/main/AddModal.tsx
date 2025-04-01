@@ -30,16 +30,22 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     console.log(data);
   };
 
+  let classes =
+    "w-[312px] md:w-[368px] rounded-2xl bg-white flex flex-col justify-center items-center py-8 px-5 gap-6";
+
+  if (type === "self") {
+    classes += " h-[522px]";
+  } else {
+    classes += " h-[582px]";
+  }
+
   return (
     <Modal open={open} onClose={onCloseModal}>
-      <form
-        onSubmit={handleSubmit}
-        className="w-[87vw] h-[80dvh] rounded-2xl bg-white flex flex-col justify-center items-center py-8 px-5 gap-6"
-      >
+      <form onSubmit={handleSubmit} className={classes}>
         <h1 className="title-extra-18 text-gray-01">
           {type === "self" ? "직접 등록하기" : "스캔으로 등록하기"}
         </h1>
-        <div className="flex flex-col w-full gap-5 pt-4 overflow-scroll">
+        <div className="flex flex-col w-full gap-5 pt-4">
           <div className="flex flex-col w-full gap-3">
             {type === "receipt" && (
               <div className="flex items-center justify-center w-full gap-3 px-3">
@@ -59,10 +65,17 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
                 </button>
               </div>
             )}
-            <Selector selectTitle={"카테고리"} selectList={category} name="category" />
+            <Selector
+              selectTitle={"카테고리"}
+              selectList={category}
+              dataTitle={(data) => data}
+              dataValue={(data) => data}
+              name="category"
+            />
             <Datepicker
               inputName="date"
-              inputClassName="w-full h-10 gap-1 px-4 border body-med-14 text-gray-01 rounded-xl border-gray-05 focus:outline-0"
+              containerClassName="w-[272px] md:w-[312px] h-[41px] relative w-full text-gray-700"
+              inputClassName="w-[272px] md:w-[312px] h-[41px] gap-1 px-4 border body-med-14 text-gray-01 rounded-xl border-gray-05 focus:outline-0"
               popoverDirection="down"
               readOnly
               i18n={"ko"}
