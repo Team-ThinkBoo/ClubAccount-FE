@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = ({ children, ...props }: ButtonProps) => {
   const { disabled } = props;
   let classes =
-    "w-[272px] h-12 flex justify-center items-center lg:w-[312px] body-bold-16 px-4 rounded-lg";
+    "w-[272px] h-12 flex justify-center items-center md:w-[312px] body-bold-16 px-4 rounded-lg";
   if (disabled) {
     classes += " bg-white text-gray-03 border border-gray-04";
   } else {
