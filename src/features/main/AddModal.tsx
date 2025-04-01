@@ -65,7 +65,13 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
                 </button>
               </div>
             )}
-            <Selector selectTitle={"카테고리"} selectList={category} name="category" />
+            <Selector
+              selectTitle={"카테고리"}
+              selectList={category}
+              dataTitle={(data) => data}
+              dataValue={(data) => data}
+              name="category"
+            />
             <Datepicker
               inputName="date"
               containerClassName="w-[272px] md:w-[312px] h-[41px] relative w-full text-gray-700"
