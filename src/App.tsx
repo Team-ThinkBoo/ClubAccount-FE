@@ -5,6 +5,8 @@ import { PARAMS_IDS } from "./constants/constants";
 import MainPage from "./pages/MainPage";
 import MainLayout from "./pages/MainLayout";
 import { receiptLoader } from "./utils/loaderFn";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./utils/http";
 
 const router = createBrowserRouter([
   { path: "/", element: <MainLayout /> },
@@ -21,7 +23,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;
