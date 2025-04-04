@@ -16,3 +16,11 @@ export interface ReceiptType {
 }
 
 export type AddModalType = "receipt" | "self";
+
+export interface FetchErrorType extends Error {
+  code?: number;
+  info?: {
+    errorCode: string;
+    message: string;
+  };
+}
