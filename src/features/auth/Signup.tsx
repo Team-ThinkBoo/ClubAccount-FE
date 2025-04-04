@@ -25,6 +25,7 @@ const signupSchema = z
     passwordCheck: z.string()
   })
   .refine((data) => data.password === data.passwordCheck, {
+    path: ["passwordCheck"],
     message: "❌ 비밀번호가 일치하지 않습니다!"
   });
 
@@ -52,6 +53,7 @@ const passwordCheckSchema = z
     passwordCheck: z.string()
   })
   .refine((data) => data.password === data.passwordCheck, {
+    path: ["passwordCheck"],
     message: "❌ 비밀번호가 일치하지 않습니다!"
   });
 
