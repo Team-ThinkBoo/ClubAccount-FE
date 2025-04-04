@@ -11,3 +11,7 @@ export interface SignupType {
   passwordCheck: UserType["password"];
   organization: UserType["organization"];
 }
+
+export type SignupErrorType = {
+  _errors?: string[];
+} & Partial<Record<keyof SignupType, { _errors: string[] }>>;
