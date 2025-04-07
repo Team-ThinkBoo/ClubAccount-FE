@@ -16,8 +16,8 @@ import {
   passwordSchema,
   signupSchema
 } from "../../utils/schemas";
-import { z } from "zod";
 import InputAndError from "./InputAndError";
+import { useValidator } from "../../hooks/useValidator";
 
 const schemaMap = {
   authId: authIdSchema,
@@ -33,23 +33,12 @@ const Signup = () => {
     password: "",
     passwordCheck: ""
   });
-  const [errors, setErrors] = useState<SignupErrorType>({});
   const [verificationSent, setVerificationSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [successVerification, setSuccessVerification] = useState(false);
   const navigate = useNavigate();
 
-  function validateAndRun<T>(schema: z.Schema<T>, data: unknown, onSuccess: (data: T) => void) {
-    const result = schema.safeParse(data);
-
-    if (!result.success) {
-      setErrors(result.error.format() as SignupErrorType);
-      return;
-    }
-
-    setErrors({});
-    onSuccess(result.data);
-  }
+  const { errors, setErrors, validateAndRun } = useValidator<SignupErrorType>();
 
   const { mutate: signupMutation } = useMutation<unknown, FetchErrorType, SignupType>({
     mutationFn: signup,
