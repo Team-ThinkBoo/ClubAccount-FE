@@ -53,7 +53,6 @@ const CategoryChart = ({ data }: CategoryChartProps) => {
           dataKey="value"
           label={renderLabel}
           labelLine={false}
-          isAnimationActive={false}
         >
           {data.map((data, index) => (
             <Cell key={data.name} fill={COLORS[index]} className="focus:outline-none" />
