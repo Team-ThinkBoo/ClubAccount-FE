@@ -8,54 +8,21 @@ import { sendVerificationEmail, signup } from "../../utils/signup";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserType } from "../../types/user";
-import { z } from "zod";
 import SignupInputError from "./SignupInputError";
+import {
+  authIdSchema,
+  organizationSchema,
+  passwordCheckSchema,
+  passwordSchema,
+  signupSchema
+} from "../../utils/schemas";
 
-// ✅ 회원가입 유효성 검사용 Zod 스키마
-const signupSchema = z
-  .object({
-    authId: z.string().email("📧 유효한 이메일을 입력하세요!"),
-    organization: z.string().min(1, "🏢 조직명을 입력하세요!"),
-    password: z
-      .string()
-      .min(8, "🔒 비밀번호는 최소 8자 이상이어야 합니다.")
-      .regex(/[A-Za-z]/, "🔠 문자를 포함해야 합니다.")
-      .regex(/[0-9]/, "🔢 숫자를 포함해야 합니다.")
-      .regex(/[!@#$%^&*]/, "🔣 특수문자(!@#$%^&*)를 포함해야 합니다."),
-    passwordCheck: z.string()
-  })
-  .refine((data) => data.password === data.passwordCheck, {
-    path: ["passwordCheck"],
-    message: "❌ 비밀번호가 일치하지 않습니다!"
-  });
-
-const authIdSchema = z.object({
-  authId: z.string().email("📧 유효한 이메일을 입력하세요!")
-});
-
-const organizationSchema = z.object({
-  organization: z.string().min(1, "🏢 조직명을 입력하세요!")
-});
-
-const passwordSchema = z.object({
-  password: z
-    .string()
-    .min(8, "🔒 비밀번호는 최소 8자 이상이어야 합니다.")
-    .regex(/[A-Za-z]/, "🔠 문자를 포함해야 합니다.")
-    .regex(/[0-9]/, "🔢 숫자를 포함해야 합니다.")
-    .regex(/[!@#$%^&*]/, "🔣 특수문자(!@#$%^&*)를 포함해야 합니다."),
-  passwordCheck: z.string()
-});
-
-const passwordCheckSchema = z
-  .object({
-    password: z.string(),
-    passwordCheck: z.string()
-  })
-  .refine((data) => data.password === data.passwordCheck, {
-    path: ["passwordCheck"],
-    message: "❌ 비밀번호가 일치하지 않습니다!"
-  });
+const schemaMap = {
+  authId: authIdSchema,
+  organization: organizationSchema,
+  password: passwordSchema,
+  passwordCheck: passwordCheckSchema
+} as const;
 
 const Signup = () => {
   const [signupData, setSignupData] = useState<SignupType>({
@@ -139,23 +106,9 @@ const Signup = () => {
     setSignupData((prev) => {
       const updated = { ...prev, [key]: e.target.value };
 
-      if (key === "authId") {
-        const result = authIdSchema.safeParse(updated);
-        setErrors((prev) =>
-          result.success ? { ...prev, [key]: undefined } : { ...prev, ...result.error.format() }
-        );
-      } else if (key === "organization") {
-        const result = organizationSchema.safeParse(updated);
-        setErrors((prev) =>
-          result.success ? { ...prev, [key]: undefined } : { ...prev, ...result.error.format() }
-        );
-      } else if (key === "password") {
-        const result = passwordSchema.safeParse(updated);
-        setErrors((prev) =>
-          result.success ? { ...prev, [key]: undefined } : { ...prev, ...result.error.format() }
-        );
-      } else if (key === "passwordCheck") {
-        const result = passwordCheckSchema.safeParse(updated);
+      const schema = schemaMap[key as keyof typeof schemaMap];
+      if (schema) {
+        const result = schema.safeParse(updated);
         setErrors((prev) =>
           result.success ? { ...prev, [key]: undefined } : { ...prev, ...result.error.format() }
         );
