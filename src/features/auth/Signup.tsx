@@ -16,6 +16,7 @@ import {
   passwordSchema,
   signupSchema
 } from "../../utils/schemas";
+import { z } from "zod";
 
 const schemaMap = {
   authId: authIdSchema,
@@ -36,6 +37,18 @@ const Signup = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [successVerification, setSuccessVerification] = useState(false);
   const navigate = useNavigate();
+
+  function validateAndRun<T>(schema: z.Schema<T>, data: unknown, onSuccess: (data: T) => void) {
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      setErrors(result.error.format() as SignupErrorType);
+      return;
+    }
+
+    setErrors({});
+    onSuccess(result.data);
+  }
 
   const { mutate: signupMutation } = useMutation<unknown, FetchErrorType, SignupType>({
     mutationFn: signup,
@@ -73,29 +86,15 @@ const Signup = () => {
   });
 
   function handleSubmit() {
-    const result = signupSchema.safeParse(signupData);
-
-    if (!result.success) {
-      setErrors(result.error.format());
-      return;
-    }
-
-    setErrors({});
-
-    signupMutation({ ...signupData });
+    validateAndRun(signupSchema, signupData, (data) => {
+      signupMutation({ ...data });
+    });
   }
 
   function handleVerificationEmail() {
-    const result = authIdSchema.safeParse({ authId: signupData.authId });
-
-    if (!result.success) {
-      setErrors((prev) => ({ ...prev, authId: result.error.format().authId }));
-      return;
-    }
-
-    setErrors({});
-
-    verifyEmailMutation(signupData.authId);
+    validateAndRun(authIdSchema, signupData, (data) => {
+      verifyEmailMutation(data.authId);
+    });
   }
 
   function handleCheckVerificationEmail() {
