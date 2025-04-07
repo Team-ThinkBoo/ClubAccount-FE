@@ -5,7 +5,9 @@ const ProfileOverview = () => {
   return (
     <div className="p-6 md:px-[76px] lg:px-[124px]">
       <Profile />
-      <Overview />
+      <div className="flex justify-center w-full">
+        <Overview />
+      </div>
     </div>
   );
 };

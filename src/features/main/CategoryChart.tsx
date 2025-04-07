@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#B1C29E", "#F0A04B", "#FCE7C8", "#FDD55D"];
 
@@ -39,30 +39,32 @@ interface CategoryChartProps {
 
 const CategoryChart = ({ data }: CategoryChartProps) => {
   return (
-    <div className="flex items-center justify-center focus:outline-none">
-      <PieChart width={250} height={250}>
-        <Pie
-          className="focus:outline-none"
-          data={data}
-          cx="50%"
-          cy="50%"
-          innerRadius={45}
-          outerRadius={110}
-          fill="#8884d8"
-          paddingAngle={2}
-          dataKey="value"
-          label={renderLabel}
-          labelLine={false}
-        >
-          {data.map((data, index) => (
-            <Cell key={data.name} fill={COLORS[index]} className="focus:outline-none" />
-          ))}
-        </Pie>
-        <Tooltip
-          formatter={(value: number, name: string) => [`${value}원`, name]}
-          wrapperStyle={{ fontSize: "14px" }}
-        />
-      </PieChart>
+    <div className="flex items-center justify-center focus:outline-none w-[250px] h-[250px] md:w-[200px] md:h-[200px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            className="focus:outline-none"
+            data={data}
+            cx="50%"
+            cy="50%"
+            innerRadius={45}
+            outerRadius={100}
+            fill="#8884d8"
+            paddingAngle={2}
+            dataKey="value"
+            label={renderLabel}
+            labelLine={false}
+          >
+            {data.map((data, index) => (
+              <Cell key={data.name} fill={COLORS[index]} className="focus:outline-none" />
+            ))}
+          </Pie>
+          <Tooltip
+            formatter={(value: number, name: string) => [`${value}원`, name]}
+            wrapperStyle={{ fontSize: "14px" }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 };
