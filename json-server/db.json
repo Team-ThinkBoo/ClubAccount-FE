@@ -1,0 +1,32 @@
+{
+  "receipt": [
+    {
+      "id": "001",
+      "user_id": "너나들이",
+      "store_name": "정통집 한양대 2호점",
+      "category": "회식비",
+      "amount": 41000,
+      "date": "2024-09-22",
+      "etc": "한줄만한줄만한줄만한한줄만한줄만한줄만한한줄만한줄만한줄만한한줄만한줄만한줄만한한줄만한줄만한줄만한",
+      "receipt_image_url": "https://thinkboo-bucket.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2025-03-17-01-02-11.jpeg?format=webp&width=1310&height=1746"
+    },
+    {
+      "id": "002",
+      "user_id": "너나들이",
+      "store_name": "돼지주막",
+      "category": "회식비",
+      "amount": 21000,
+      "date": "2024-11-13",
+      "etc": "한줄만한줄만한줄만한줄만한줄만"
+    },
+    {
+      "id": "003",
+      "user_id": "너나들이",
+      "store_name": "삼겹베네",
+      "category": "회식비",
+      "amount": 62000,
+      "date": "2024-12-02",
+      "etc": "한줄만한줄만한줄만한줄만한줄만한줄만한줄만한줄만한줄만한줄만"
+    }
+  ]
+}
