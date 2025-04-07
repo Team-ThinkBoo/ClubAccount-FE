@@ -17,6 +17,7 @@ import {
   signupSchema
 } from "../../utils/schemas";
 import { z } from "zod";
+import InputAndError from "./InputAndError";
 
 const schemaMap = {
   authId: authIdSchema,
@@ -124,29 +125,33 @@ const Signup = () => {
         <span>투명하게 공유해 보세요</span>
       </h1>
       <div className="flex flex-col items-center justify-center w-full gap-3 mt-8">
-        <AuthInput
-          name="organization"
-          type="text"
-          placeholder="조직명"
-          onChange={(e) => handleSignupInput("organization", e)}
+        <InputAndError
+          Input={
+            <AuthInput
+              name="organization"
+              type="text"
+              placeholder="조직명"
+              onChange={(e) => handleSignupInput("organization", e)}
+            />
+          }
+          errors={errors.organization}
         />
-        {errors.organization &&
-          errors.organization._errors.map((err) => (
-            <SignupInputError key={err}>{err}</SignupInputError>
-          ))}
 
-        <AuthActionInput
-          buttonText="인증하기"
-          inputProps={{
-            placeholder: "이메일",
-            type: "email",
-            name: "authId",
-            onChange: (e) => handleSignupInput("authId", e)
-          }}
-          buttonProps={{ type: "button", onClick: handleVerificationEmail }}
+        <InputAndError
+          Input={
+            <AuthActionInput
+              buttonText="인증하기"
+              inputProps={{
+                placeholder: "이메일",
+                type: "email",
+                name: "authId",
+                onChange: (e) => handleSignupInput("authId", e)
+              }}
+              buttonProps={{ type: "button", onClick: handleVerificationEmail }}
+            />
+          }
+          errors={errors.authId}
         />
-        {errors.authId &&
-          errors.authId._errors.map((err) => <SignupInputError key={err}>{err}</SignupInputError>)}
 
         {verificationSent && (
           <AuthActionInput
@@ -160,32 +165,34 @@ const Signup = () => {
           />
         )}
 
-        <AuthInput
-          type="password"
-          name="password"
-          placeholder="비밀번호"
-          onChange={(e) => handleSignupInput("password", e)}
+        <InputAndError
+          Input={
+            <AuthInput
+              type="password"
+              name="password"
+              placeholder="비밀번호"
+              onChange={(e) => handleSignupInput("password", e)}
+            />
+          }
+          errors={errors.password}
+          fallbackHint={
+            <SignupInputError color="gray">
+              문자, 숫자, 특수문자(!@#$%^&*) 포함 8자리 이상
+            </SignupInputError>
+          }
         />
-        {!errors.password && (
-          <SignupInputError color="gray">
-            문자, 숫자, 특수문자(!@#$%^&*) 포함 8자리 이상
-          </SignupInputError>
-        )}
-        {errors.password &&
-          errors.password._errors.map((err) => (
-            <SignupInputError key={err}>{err}</SignupInputError>
-          ))}
 
-        <AuthInput
-          type="password"
-          name="passwordCheck"
-          placeholder="비밀번호 확인"
-          onChange={(e) => handleSignupInput("passwordCheck", e)}
+        <InputAndError
+          Input={
+            <AuthInput
+              type="password"
+              name="passwordCheck"
+              placeholder="비밀번호 확인"
+              onChange={(e) => handleSignupInput("passwordCheck", e)}
+            />
+          }
+          errors={errors.passwordCheck}
         />
-        {errors.passwordCheck &&
-          errors.passwordCheck._errors.map((err) => (
-            <SignupInputError key={err}>{err}</SignupInputError>
-          ))}
       </div>
       <div className="flex flex-col items-center w-full gap-4 mt-12">
         <Button onClick={handleSubmit} disabled={!successVerification}>
