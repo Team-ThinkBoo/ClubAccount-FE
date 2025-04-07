@@ -1,33 +1,35 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AuthLayout from "./pages/AuthLayout";
-import AuthPage from "./pages/AuthPage";
-import { PARAMS_IDS } from "./constants/constants";
-import MainPage from "./pages/MainPage";
-import MainLayout from "./pages/MainLayout";
-import { receiptLoader } from "./utils/loaderFn";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./utils/http";
-
-const router = createBrowserRouter([
-  { path: "/", element: <MainLayout /> },
-  {
-    path: "/auth",
-    element: <AuthLayout />,
-    children: [{ index: true, element: <AuthPage /> }]
-  },
-  {
-    path: `/:${PARAMS_IDS.CLUB_CODE}`,
-    element: <MainLayout />,
-    children: [{ index: true, element: <MainPage />, loader: receiptLoader }]
-  }
-]);
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
 
-export default App;
+export default App
