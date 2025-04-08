@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import MainNavigation from "../features/main/MainNavigation";
+import ReceiptCapture from "../features/main/ReceiptCapture";
 
 const MainLayout = () => {
   return (
@@ -7,6 +8,7 @@ const MainLayout = () => {
       <MainNavigation />
       <main className="w-full h-full">
         <Outlet />
+        <ReceiptCapture />
       </main>
     </div>
   );
