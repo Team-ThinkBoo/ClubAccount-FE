@@ -4,6 +4,10 @@ import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    host: true, // 👈 외부에서 접근 가능하게!
+    port: 5173 // 포트는 그대로 둬도 돼
+  },
   plugins: [
     react(),
     VitePWA({
