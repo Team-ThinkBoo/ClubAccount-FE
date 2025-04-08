@@ -1,59 +1,53 @@
-import { useRef, useState } from "react";
-import Webcam from "react-webcam";
+import { ChangeEvent, useRef } from "react";
+import CameraIcon from "../../icons/CameraIcon";
+import FolderIcon from "../../icons/FolderIcon";
 
-const ReceiptCamera = () => {
-  const webcamRef = useRef<Webcam>(null);
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const [photo, setPhoto] = useState<string | null>(null);
+interface ReceiptCaptureProps {
+  onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
 
-  const videoConstraints = {
-    facingMode: "environment"
-  };
-
-  const capture = () => {
-    const imageSrc = webcamRef.current?.getScreenshot();
-    if (imageSrc) {
-      setPhoto(imageSrc);
-      setIsCameraOpen(false);
-    }
-  };
+const ReceiptCapture = ({ onFileChange }: ReceiptCaptureProps) => {
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="flex flex-col items-center">
-      {isCameraOpen ? (
-        <div className="relative w-full max-w-[400px] aspect-video">
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-            className="object-cover w-full h-full rounded-md"
-          />
-          <button
-            onClick={capture}
-            className="absolute px-6 py-2 text-black -translate-x-1/2 bg-white rounded-full bottom-4 left-1/2"
-          >
-            📷 찍기
-          </button>
-        </div>
-      ) : photo ? (
-        <div className="flex flex-col items-center gap-4">
-          <img src={photo} alt="촬영된 영수증" className="w-full max-w-[400px] rounded-md" />
-          <div className="flex gap-4">
-            <button onClick={() => setIsCameraOpen(true)}>다시 찍기</button>
-            <button onClick={() => alert("업로드 또는 저장")}>사용하기</button>
-          </div>
-        </div>
-      ) : (
+    <div className="flex items-center justify-center w-full gap-3 px-3">
+      <input
+        type="file"
+        accept="image/*"
+        ref={galleryInputRef}
+        onChange={onFileChange}
+        className="hidden"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        ref={cameraInputRef}
+        onChange={onFileChange}
+        className="hidden"
+      />
+
+      <div className="flex gap-4">
         <button
-          onClick={() => setIsCameraOpen(true)}
-          className="px-4 py-2 text-white bg-blue-500 rounded-md"
+          type="button"
+          className="flex gap-2 justify-center items-center px-3 py-2 rounded-lg bg-gray-05 body-med-14 text-gray-02 w-[calc(50%-6px)] focus:outline-none"
+          onClick={() => cameraInputRef.current?.click()}
         >
-          사진 찍기
+          <CameraIcon />
+          <p>사진 촬영</p>
         </button>
-      )}
+        <button
+          type="button"
+          className="flex gap-2 justify-center items-center px-3 py-2 rounded-lg bg-gray-05 body-med-14 text-gray-02 w-[calc(50%-6px)] focus:outline-none"
+          onClick={() => galleryInputRef.current?.click()}
+        >
+          <FolderIcon />
+          <p>불러 오기</p>
+        </button>
+      </div>
     </div>
   );
 };
 
-export default ReceiptCamera;
+export default ReceiptCapture;
