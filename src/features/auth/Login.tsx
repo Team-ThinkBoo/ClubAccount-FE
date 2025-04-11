@@ -1,6 +1,5 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
-import TermsModal from "./TermsModal";
 import AuthLink from "./AuthLink";
 import Button from "../../components/Button";
 import AuthInput from "./AuthInput";
@@ -16,7 +15,6 @@ import { login } from "../../utils/login";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const Login = () => {
-  const [openModal, setOpenModal] = useState(false);
   const { errors: error, validateAndRun } = useValidator<LoginErrorType>();
   const authIdRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -37,14 +35,6 @@ const Login = () => {
     }
   });
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
   const handleLogin = () => {
     const loginData = {
       authId: authIdRef.current?.value,
@@ -58,7 +48,6 @@ const Login = () => {
 
   return (
     <>
-      <TermsModal open={openModal} onCloseModal={handleCloseModal} />
       <LogoIcon className="w-16 h-[35px]" />
 
       <div className="flex flex-col items-center justify-center w-full gap-3 mt-16">
@@ -72,9 +61,7 @@ const Login = () => {
 
         <div className="flex w-full px-[60px] justify-between caption-med-12 text-gray-03 mx-auto">
           <AuthLink to={`?mode=${AUTH_SEARCH_PARAMS.CHANGE_PW}`}>비밀번호 변경</AuthLink>
-          <button className="caption-med-12 text-grey-03" onClick={handleOpenModal}>
-            회원가입
-          </button>
+          <button className="caption-med-12 text-grey-03">회원가입</button>
         </div>
       </div>
     </>
