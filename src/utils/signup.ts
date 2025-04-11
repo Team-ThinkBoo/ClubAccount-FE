@@ -50,10 +50,10 @@ export async function signup(signupData: SignupType) {
     throw error;
   }
 
-  await login({
+  const loginData = await login({
     authId: signupData.authId,
     password: signupData.password
   });
 
-  return response;
+  return loginData;
 }

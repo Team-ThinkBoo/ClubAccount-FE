@@ -8,8 +8,6 @@ export async function login(loginData: LoginType) {
       withCredentials: true
     });
 
-    localStorage.setItem("accessToken", response.data.accessToken);
-
     return response.data;
   } catch (error: unknown) {
     throw createFetchError(error, "로그인 과정에서 오류가 발생하였습니다!");

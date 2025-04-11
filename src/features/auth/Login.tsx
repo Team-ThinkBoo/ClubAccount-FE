@@ -6,26 +6,30 @@ import Button from "../../components/Button";
 import AuthInput from "./AuthInput";
 import LogoIcon from "../../icons/LogoIcon";
 import { loginSchema } from "../../utils/schemas";
-import { LoginErrorType, LoginType } from "../../types/auth";
+import { LoginErrorType, LoginResponseType, LoginType } from "../../types/auth";
 import SignupInputError from "./SignupInputError";
 import { useValidator } from "../../hooks/useValidator";
 import { useMutation } from "@tanstack/react-query";
 import { FetchErrorType } from "../../types/types";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../utils/login";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const Login = () => {
   const [openModal, setOpenModal] = useState(false);
   const { errors: error, validateAndRun } = useValidator<LoginErrorType>();
   const authIdRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const { setAuth } = useAuthStore();
 
   const navigate = useNavigate();
 
-  const { mutate: loginMutation } = useMutation<unknown, FetchErrorType, LoginType>({
+  const { mutate: loginMutation } = useMutation<LoginResponseType, FetchErrorType, LoginType>({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (data) => {
       console.log("✅ 로그인 성공! 리다이렉트 실행");
+
+      setAuth(data.accessToken);
       navigate("/");
     },
     onError: (err) => {
