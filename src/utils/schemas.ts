@@ -44,3 +44,30 @@ export const passwordCheckSchema = z
     path: ["passwordCheck"],
     message: "❌ 비밀번호가 일치하지 않습니다!"
   });
+
+export const loginSchema = z
+  .object({
+    authId: z.string().trim(),
+    password: z.string().trim()
+  })
+  .superRefine((data, ctx) => {
+    const hasId = !!data.authId;
+    const hasPw = !!data.password;
+
+    if (!hasId && !hasPw) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "아이디와 비밀번호를 입력해주세요"
+      });
+    } else if (!hasId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "아이디를 입력해주세요"
+      });
+    } else if (!hasPw) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "비밀번호를 입력해주세요"
+      });
+    }
+  });

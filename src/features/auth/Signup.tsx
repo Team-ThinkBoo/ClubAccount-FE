@@ -3,7 +3,7 @@ import Button from "../../components/Button";
 import AuthActionInput from "./AuthActionInput";
 import AuthInput from "./AuthInput";
 import { FetchErrorType } from "../../types/types";
-import { SignupErrorType, SignupType } from "../../types/auth";
+import { LoginResponseType, SignupErrorType, SignupType } from "../../types/auth";
 import { sendVerificationEmail, signup } from "../../utils/signup";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,8 @@ import {
 } from "../../utils/schemas";
 import InputAndError from "./InputAndError";
 import { useValidator } from "../../hooks/useValidator";
+import { useAuthStore } from "../../store/useAuthStore";
+import TermsModal from "./TermsModal";
 
 const schemaMap = {
   authId: authIdSchema,
@@ -36,14 +38,17 @@ const Signup = () => {
   const [verificationSent, setVerificationSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [successVerification, setSuccessVerification] = useState(false);
+  const [openModal, setOpenModal] = useState(true);
   const navigate = useNavigate();
+  const { setAuth } = useAuthStore();
 
   const { errors, setErrors, validateAndRun } = useValidator<SignupErrorType>();
 
-  const { mutate: signupMutation } = useMutation<unknown, FetchErrorType, SignupType>({
+  const { mutate: signupMutation } = useMutation<LoginResponseType, FetchErrorType, SignupType>({
     mutationFn: signup,
-    onSuccess: () => {
+    onSuccess: (data) => {
       console.log("✅ 회원가입 성공! 리다이렉트 실행");
+      setAuth(data.accessToken);
       navigate("/");
     },
     onError: (err) => {
@@ -107,8 +112,14 @@ const Signup = () => {
     });
   }
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
+      <TermsModal open={openModal} onCloseModal={handleCloseModal} />
+
       <h1 className="flex flex-col items-center justify-center whitespace-pre title-extra-18 text-gray-01">
         <span>지금 가입하여 </span>
         <span>투명하게 공유해 보세요</span>

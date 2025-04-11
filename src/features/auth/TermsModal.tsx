@@ -1,8 +1,9 @@
 import Modal from "../../components/Modal";
-import { Link } from "react-router-dom";
-import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 import Button from "../../components/Button";
 import LogoIcon from "../../icons/LogoIcon";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 
 interface TermsModalProps {
   open: boolean;
@@ -10,8 +11,25 @@ interface TermsModalProps {
 }
 
 const TermsModal = ({ open, onCloseModal }: TermsModalProps) => {
+  const navigate = useNavigate();
+  const [isAgreeClose, setIsAgreeClose] = useState(false);
+
+  function handleClose() {
+    if (!isAgreeClose) {
+      navigate(`/auth?mode=${AUTH_SEARCH_PARAMS.LOGIN}`);
+    }
+
+    onCloseModal();
+    setIsAgreeClose(false);
+  }
+
+  const handleAgree = () => {
+    setIsAgreeClose(true);
+    onCloseModal();
+  };
+
   return (
-    <Modal open={open} onClose={onCloseModal}>
+    <Modal open={open} onClose={handleClose}>
       <div className="flex flex-col items-center gap-4 p-6 bg-white max-w-[370px] justify-center rounded-xl">
         <LogoIcon className="w-16 h-[35px]" />
         <h2 className="text-base font-semibold">약관 동의</h2>
@@ -39,12 +57,7 @@ const TermsModal = ({ open, onCloseModal }: TermsModalProps) => {
             필요한 경우 이에 따라 처리됩니다.
           </p>
         </div>
-        <Link
-          className="flex items-center justify-center w-full mt-4"
-          to={`?mode=${AUTH_SEARCH_PARAMS.SIGNUP}`}
-        >
-          <Button>동의합니다</Button>
-        </Link>
+        <Button onClick={handleAgree}>동의합니다</Button>
       </div>
     </Modal>
   );

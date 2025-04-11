@@ -1,13 +1,10 @@
 import { CheckDuplicateIdType, SignupType } from "../types/auth";
 import { FetchErrorType } from "../types/types";
 import { UserType } from "../types/user";
-
-const url = import.meta.env.VITE_BACKEND;
+import { login } from "./login";
 
 async function checkDuplicateId(email: UserType["email"]) {
-  const response = await fetch(
-    `${url}/api/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`
-  );
+  const response = await fetch(`/api/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`);
 
   if (!response.ok) {
     const error: FetchErrorType = new Error("이메일 중복 확인 과정에서 오류가 발생하였습니다!");
@@ -37,7 +34,7 @@ export async function checkVerificationEmail(code: string) {
 }
 
 export async function signup(signupData: SignupType) {
-  const response = await fetch(`${url}/api/v1/users/sign-up`, {
+  const response = await fetch(`/api/v1/users/sign-up`, {
     method: "POST",
     body: JSON.stringify(signupData),
     headers: {
@@ -53,5 +50,10 @@ export async function signup(signupData: SignupType) {
     throw error;
   }
 
-  return response;
+  const loginData = await login({
+    authId: signupData.authId,
+    password: signupData.password
+  });
+
+  return loginData;
 }

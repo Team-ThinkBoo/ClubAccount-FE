@@ -1,13 +1,22 @@
 import NavList from "../../components/NavList";
+import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 import LogoIcon from "../../icons/LogoIcon";
-
-const menuList = [
-  { title: "영수증", link: "receipts" },
-  { title: "회계록", link: "accounting" },
-  { title: "Q&A", link: "qna" }
-];
+import { useAuthStore } from "../../store/useAuthStore";
 
 const MainNavigation = () => {
+  const { isLoggedIn } = useAuthStore();
+
+  const menuList = isLoggedIn
+    ? [
+        { title: "영수증", link: "/receipts" },
+        { title: "회계록", link: "/accounting" },
+        { title: "Q&A", link: "/qna" }
+      ]
+    : [
+        { title: "로그인", link: `/auth?mode=${AUTH_SEARCH_PARAMS.LOGIN}` },
+        { title: "회원가입", link: `/auth?mode=${AUTH_SEARCH_PARAMS.SIGNUP}` }
+      ];
+
   return (
     <header className="flex-shrink-0 h-16 border-b-2 border-gray-05">
       <nav className="flex items-center w-[360px] md:w-[768px] lg:w-[1024px] h-16">

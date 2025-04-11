@@ -6,7 +6,15 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: {
     host: true, // 👈 외부에서 접근 가능하게!
-    port: 5173 // 포트는 그대로 둬도 돼
+    port: 5173, // 포트는 그대로 둬도 돼
+    proxy: {
+      "/api": {
+        target: "http://3.37.76.54:8080",
+        changeOrigin: true,
+        secure: false,
+        cookieDomainRewrite: "localhost" // ← 이게 있어야 localhost에서도 쿠키 저장됨
+      }
+    }
   },
   plugins: [
     react(),
