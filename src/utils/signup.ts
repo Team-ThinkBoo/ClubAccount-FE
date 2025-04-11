@@ -1,6 +1,7 @@
 import { CheckDuplicateIdType, SignupType } from "../types/auth";
 import { FetchErrorType } from "../types/types";
 import { UserType } from "../types/user";
+import { login } from "./login";
 
 async function checkDuplicateId(email: UserType["email"]) {
   const response = await fetch(`/api/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`);
@@ -48,6 +49,11 @@ export async function signup(signupData: SignupType) {
     console.log(error.info);
     throw error;
   }
+
+  await login({
+    authId: signupData.authId,
+    password: signupData.password
+  });
 
   return response;
 }
