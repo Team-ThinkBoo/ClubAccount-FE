@@ -3,6 +3,7 @@ import Button from "../../components/Button";
 import LogoIcon from "../../icons/LogoIcon";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 
 interface TermsModalProps {
   open: boolean;
@@ -15,7 +16,7 @@ const TermsModal = ({ open, onCloseModal }: TermsModalProps) => {
 
   function handleClose() {
     if (!isAgreeClose) {
-      navigate("/auth?mode=login");
+      navigate(`/auth?mode=${AUTH_SEARCH_PARAMS.LOGIN}`);
     }
 
     onCloseModal();

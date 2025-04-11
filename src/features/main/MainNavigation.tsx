@@ -1,4 +1,5 @@
 import NavList from "../../components/NavList";
+import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 import LogoIcon from "../../icons/LogoIcon";
 import { useAuthStore } from "../../store/useAuthStore";
 
@@ -12,8 +13,8 @@ const MainNavigation = () => {
         { title: "Q&A", link: "/qna" }
       ]
     : [
-        { title: "로그인", link: "/auth?mode=login" },
-        { title: "회원가입", link: "/auth?mode=signup" }
+        { title: "로그인", link: `/auth?mode=${AUTH_SEARCH_PARAMS.LOGIN}` },
+        { title: "회원가입", link: `/auth?mode=${AUTH_SEARCH_PARAMS.SIGNUP}` }
       ];
 
   return (
