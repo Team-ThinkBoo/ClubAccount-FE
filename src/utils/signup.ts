@@ -10,7 +10,7 @@ import { UserType } from "../types/user";
 import { login } from "./login";
 import { createFetchError } from "./axios";
 
-async function checkDuplicateId(email: UserType["email"]) {
+export async function checkDuplicateId(email: UserType["email"]) {
   const response = await fetch(`/api/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`);
 
   if (!response.ok) {
@@ -22,19 +22,17 @@ async function checkDuplicateId(email: UserType["email"]) {
 
   const { notDuplicated } = (await response.json()) as CheckDuplicateIdType;
 
-  return !notDuplicated;
-}
-
-export async function sendVerificationEmail(email: UserType["email"]) {
-  const isDuplicate = await checkDuplicateId(email);
-
-  if (isDuplicate) {
+  if (!notDuplicated) {
     const error: FetchErrorType = new Error("이메일이 중복되었습니다!");
     error.code = 409;
     error.info = { errorCode: "409 Conflict", message: "이메일이 중복되었습니다!" };
     throw error;
   }
 
+  return email;
+}
+
+export async function sendVerificationEmail(email: UserType["email"]) {
   try {
     const response = await axios.post(`/api/v1/email/send`, { email });
 

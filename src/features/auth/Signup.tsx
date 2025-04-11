@@ -10,7 +10,12 @@ import {
   VerifyCodeType,
   VerifyResponseType
 } from "../../types/auth";
-import { checkVerificationEmail, sendVerificationEmail, signup } from "../../utils/signup";
+import {
+  checkDuplicateId,
+  checkVerificationEmail,
+  sendVerificationEmail,
+  signup
+} from "../../utils/signup";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserType } from "../../types/user";
@@ -44,6 +49,7 @@ const Signup = () => {
   const [verificationSent, setVerificationSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [successVerification, setSuccessVerification] = useState(false);
+  const [emailInputDisabled, setEmailInputDisabled] = useState(false);
   const [openModal, setOpenModal] = useState(true);
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
@@ -59,6 +65,23 @@ const Signup = () => {
     },
     onError: (err) => {
       console.error("❌ 회원가입 실패:", err);
+    }
+  });
+
+  const { mutate: checkEmailMutation } = useMutation<
+    UserType["email"],
+    FetchErrorType,
+    UserType["email"]
+  >({
+    mutationFn: checkDuplicateId,
+    onSuccess: (data) => {
+      verifyEmailMutation(data);
+      alert("📧 이메일 인증 코드가 전송되었습니다!");
+      setVerificationSent(true); // ✅ 인증 코드 입력 필드 활성화
+    },
+    onError: (err) => {
+      console.error("❌ 이메일 중복 확인 실패:", err);
+      alert(`📧 ${err.info?.message}`);
     }
   });
 
@@ -80,7 +103,8 @@ const Signup = () => {
     onSuccess: (data) => {
       if (data.success) {
         alert("✅ 인증이 완료되었습니다!");
-        setSuccessVerification(true); // ✅ 인증 코드 입력 필드 활성화
+        setSuccessVerification(true);
+        setEmailInputDisabled(true);
       } else {
         alert("인증번호가 잘못되었습니다!");
         setSuccessVerification(false);
@@ -100,10 +124,8 @@ const Signup = () => {
 
   function handleVerificationEmail() {
     validateAndRun(authIdSchema, signupData, (data) => {
-      verifyEmailMutation(data.authId);
+      checkEmailMutation(data.authId);
     });
-    alert("📧 이메일 인증 코드가 전송되었습니다!");
-    setVerificationSent(true); // ✅ 인증 코드 입력 필드 활성화
   }
 
   function handleCheckVerificationEmail() {
@@ -156,12 +178,18 @@ const Signup = () => {
             <AuthActionInput
               buttonText="인증하기"
               inputProps={{
+                disabled: emailInputDisabled,
                 placeholder: "이메일",
                 type: "email",
                 name: "authId",
+                value: signupData.authId,
                 onChange: (e) => handleSignupInput("authId", e)
               }}
-              buttonProps={{ type: "button", onClick: handleVerificationEmail }}
+              buttonProps={{
+                disabled: emailInputDisabled,
+                type: "button",
+                onClick: handleVerificationEmail
+              }}
             />
           }
           errors={errors.authId}
@@ -172,10 +200,11 @@ const Signup = () => {
             buttonText="확인"
             inputProps={{
               placeholder: "인증번호",
+              value: verificationCode,
               onChange: (e) => setVerificationCode(e.target.value),
-              disabled: !verificationSent
+              disabled: emailInputDisabled
             }}
-            buttonProps={{ disabled: !verificationSent, onClick: handleCheckVerificationEmail }}
+            buttonProps={{ disabled: emailInputDisabled, onClick: handleCheckVerificationEmail }}
           />
         )}
 
