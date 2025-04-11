@@ -5,6 +5,11 @@ export interface CheckDuplicateIdType {
   notDuplicated: boolean;
 }
 
+export interface VerifyCodeType {
+  email: UserType["email"];
+  code: string;
+}
+
 export interface SignupType {
   authId: UserType["email"];
   password: UserType["password"];
@@ -24,4 +29,9 @@ export interface LoginErrorType {
 
 export interface LoginResponseType {
   accessToken: string;
+}
+
+export interface VerifyResponseType {
+  success: boolean;
+  message: string;
 }
