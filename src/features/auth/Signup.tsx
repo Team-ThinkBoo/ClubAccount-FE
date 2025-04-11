@@ -3,8 +3,14 @@ import Button from "../../components/Button";
 import AuthActionInput from "./AuthActionInput";
 import AuthInput from "./AuthInput";
 import { FetchErrorType } from "../../types/types";
-import { LoginResponseType, SignupErrorType, SignupType } from "../../types/auth";
-import { sendVerificationEmail, signup } from "../../utils/signup";
+import {
+  LoginResponseType,
+  SignupErrorType,
+  SignupType,
+  VerifyCodeType,
+  VerifyResponseType
+} from "../../types/auth";
+import { checkVerificationEmail, sendVerificationEmail, signup } from "../../utils/signup";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserType } from "../../types/user";
@@ -58,21 +64,27 @@ const Signup = () => {
 
   const { mutate: verifyEmailMutation } = useMutation<unknown, FetchErrorType, UserType["email"]>({
     mutationFn: sendVerificationEmail,
-    onSuccess: () => {
-      alert("📧 이메일 인증 코드가 전송되었습니다!");
-      setVerificationSent(true); // ✅ 인증 코드 입력 필드 활성화
-    },
+    onSuccess: () => {},
     onError: (err) => {
       console.error("❌ 이메일 인증 실패:", err);
       alert("❌ 이메일 인증 요청에 실패했습니다.");
     }
   });
 
-  const { mutate: checkVerifyEmailMutation } = useMutation<unknown, FetchErrorType, string>({
-    mutationFn: sendVerificationEmail,
-    onSuccess: () => {
-      alert("✅ 인증이 완료되었습니다!");
-      setSuccessVerification(true); // ✅ 인증 코드 입력 필드 활성화
+  const { mutate: checkVerifyEmailMutation } = useMutation<
+    VerifyResponseType,
+    FetchErrorType,
+    VerifyCodeType
+  >({
+    mutationFn: checkVerificationEmail,
+    onSuccess: (data) => {
+      if (data.success) {
+        alert("✅ 인증이 완료되었습니다!");
+        setSuccessVerification(true); // ✅ 인증 코드 입력 필드 활성화
+      } else {
+        alert("인증번호가 잘못되었습니다!");
+        setSuccessVerification(false);
+      }
     },
     onError: (err) => {
       console.error("❌ 이메일 인증 실패:", err);
@@ -90,10 +102,12 @@ const Signup = () => {
     validateAndRun(authIdSchema, signupData, (data) => {
       verifyEmailMutation(data.authId);
     });
+    alert("📧 이메일 인증 코드가 전송되었습니다!");
+    setVerificationSent(true); // ✅ 인증 코드 입력 필드 활성화
   }
 
   function handleCheckVerificationEmail() {
-    checkVerifyEmailMutation(verificationCode);
+    checkVerifyEmailMutation({ email: signupData.authId, code: verificationCode });
   }
 
   function handleSignupInput(key: keyof SignupType, e: ChangeEvent<HTMLInputElement>) {
