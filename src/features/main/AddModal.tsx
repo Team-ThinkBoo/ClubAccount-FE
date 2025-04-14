@@ -16,6 +16,7 @@ import {
 } from "../../types/receipt";
 import { CATEGORY } from "../../constants/constants";
 import { formatDate } from "../../utils/util";
+import ReceiptDetailsList from "./ReceiptDetailsList";
 
 const categoryKeys = Object.keys(CATEGORY) as CategoryKeyType[];
 interface AddModalProps {
@@ -29,7 +30,6 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     startDate: null,
     endDate: null
   });
-
   const [value, setValue] = useState<ReceiptRequestType>({
     request: {
       amount: Number(""),
@@ -39,8 +39,9 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
       receiptItems: []
     }
   });
-
   const [preview, setPreview] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
+
   const handleChangeValue = (
     key: keyof ReceiptRequestType["request"],
     e: ChangeEvent<HTMLInputElement>
@@ -122,6 +123,10 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     createReceiptMutation(value);
   };
 
+  const handleUpdateItems = (items: ReceiptItemsType[]) => {
+    setValue((prev) => ({ ...prev, request: { ...prev.request, receiptItems: items } }));
+  };
+
   let classes =
     "w-[312px] md:w-[368px] rounded-2xl bg-white flex flex-col justify-center items-center py-8 px-5 gap-6";
 
@@ -131,16 +136,20 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     classes += " h-[582px]";
   }
 
+  const handleShowDetiles = () => {
+    setShowDetails((pre) => !pre);
+  };
+
   return (
     <Modal open={open} onClose={onCloseModal}>
       <form onSubmit={handleSubmit} className={classes}>
-        {!preview && (
+        {!preview && !showDetails && (
           <>
             <h1 className="title-extra-18 text-gray-01">
               {type === "self" ? "직접 등록하기" : "스캔으로 등록하기"}
             </h1>
             <div className="flex flex-col w-full gap-5 pt-4">
-              <div className="flex flex-col w-full gap-3">
+              <div className="flex flex-col items-center w-full gap-3">
                 {type === "receipt" && <ReceiptCapture onFileChange={handleFileChange} />}
                 <Selector
                   selectTitle={"카테고리"}
@@ -194,6 +203,13 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
                   value={value.request.etc}
                   onChange={(e) => handleChangeValue("etc", e)}
                 />
+                <button
+                  type="button"
+                  onClick={handleShowDetiles}
+                  className="text-center underline cursor-pointer text-gray-03 body-med-14"
+                >
+                  영수증 상세내역
+                </button>
               </div>
               <footer className="flex flex-col w-full gap-3">
                 <button className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01">
@@ -209,6 +225,13 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
               </footer>
             </div>
           </>
+        )}
+        {!preview && showDetails && (
+          <ReceiptDetailsList
+            receiptItems={value.request.receiptItems}
+            onBack={handleShowDetiles}
+            onUpdate={handleUpdateItems}
+          />
         )}
         {preview && (
           <>
