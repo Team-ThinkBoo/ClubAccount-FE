@@ -31,7 +31,7 @@ const TimelineHeader = () => {
 
   return (
     <>
-      <AddModal open={openModal} onCloseModal={handleCloseModal} type={modalType} />
+      {openModal && <AddModal open={openModal} onCloseModal={handleCloseModal} type={modalType} />}
       <div className="flex flex-col gap-5 min-w-[312px] w-full max-w-[568px] md:min-w-[616px] md:max-w-[824px] lg:min-x-[824px] lg:max-w-[1024px]">
         <div className="flex items-center justify-center w-full h-8 bg-primary">
           <p className="text-gray-01 title-semi-18">Timeline</p>
