@@ -41,6 +41,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
   });
   const [preview, setPreview] = useState<string | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChangeValue = (
     key: keyof ReceiptRequestType["request"],
@@ -120,6 +121,22 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const request = value.request;
+    if (
+      request.businessName.trim() === "" ||
+      request.amount === 0 ||
+      !request.category ||
+      request.date.trim() === ""
+    ) {
+      setError("메모를 제외한 비어있는 항목을 모두 채워주세요!");
+      return;
+    }
+
+    if (request.receiptItems.length === 0) {
+      setError("영수증 상세내역 항목이 존재하지 않습니다!");
+      return;
+    }
+
     createReceiptMutation(value);
   };
 
@@ -210,6 +227,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
                 >
                   영수증 상세내역
                 </button>
+                {error && <p className="text-red-400 caption-med-12">{error}</p>}
               </div>
               <footer className="flex flex-col w-full gap-3">
                 <button className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01">
