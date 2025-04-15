@@ -126,7 +126,11 @@ const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsLi
             ))}
           </tbody>
         </table>
-        <button onClick={handleAddMode} type="button" className="w-full py-2 text-center">
+        <button
+          onClick={handleAddMode}
+          type="button"
+          className="w-full py-2 text-center body-med-14 bg-gray-05"
+        >
           상품 추가하기
         </button>
       </div>
