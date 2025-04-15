@@ -10,6 +10,7 @@ interface ReceiptDetailsListProps {
 
 const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsListProps) => {
   const [items, setItems] = useState(receiptItems);
+  const [error, setError] = useState(false);
 
   function handleAddMode() {
     setItems((prev) => [
@@ -45,7 +46,20 @@ const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsLi
   }
 
   function handleSave() {
+    for (const item of items) {
+      if (
+        item.name.trim() === "" ||
+        item.price === 0 ||
+        item.quantity === 0 ||
+        item.totalPrice === 0
+      ) {
+        setError(true);
+        return;
+      }
+    }
+
     onUpdate(items);
+    setError(false);
     onBack();
   }
 
@@ -116,6 +130,7 @@ const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsLi
           상품 추가하기
         </button>
       </div>
+      {error && <p className="text-red-400 caption-med-12">비어있는 항목을 모두 채워주세요!</p>}
       <button
         onClick={handleSave}
         type="button"
