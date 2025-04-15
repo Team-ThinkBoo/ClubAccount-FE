@@ -13,10 +13,13 @@ const Selector = <T,>({
   selectList,
   dataTitle,
   dataValue,
+  value,
+  onChange,
   ...props
 }: SelectorProps<T>) => {
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState<T>();
+
+  const selectedData = selectList.find((item) => dataValue(item) === value);
 
   let classes =
     "flex items-center justify-between w-[272px] md:w-[312px] h-[41px] gap-1 px-4 border cursor-pointer rounded-t-xl border-gray-05 focus:outline-0 ";
@@ -30,7 +33,11 @@ const Selector = <T,>({
   };
 
   const handleSelect = (select: T) => {
-    setData(select);
+    onChange?.({
+      target: {
+        value: dataValue(select)
+      }
+    } as React.ChangeEvent<HTMLInputElement>);
     setOpen(false);
   };
 
@@ -38,7 +45,9 @@ const Selector = <T,>({
     <>
       <div className="relative">
         <button type="button" onClick={handleToggle} className={classes}>
-          <p className="body-med-14 text-gray-01">{data ? dataTitle(data) : selectTitle}</p>
+          <p className="body-med-14 text-gray-01">
+            {selectedData ? dataTitle(selectedData) : selectTitle}
+          </p>
           <ArrowDownIcon className="text-gray-01" />
         </button>
         {open && (
@@ -57,7 +66,7 @@ const Selector = <T,>({
           </ul>
         )}
       </div>
-      <input className="hidden" value={data ? dataValue(data) : ""} readOnly {...props} />
+      <input className="hidden" value={value ?? ""} readOnly {...props} />
     </>
   );
 };

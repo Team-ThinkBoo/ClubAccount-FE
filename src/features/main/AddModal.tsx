@@ -2,14 +2,23 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import Input from "../../components/Input";
 import Modal from "../../components/Modal";
 import Selector from "../../components/Selector";
-import { AddModalType } from "../../types/types";
+import { AddModalType, FetchErrorType } from "../../types/types";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import ReceiptCapture from "./ReceiptCapture";
+import { createReceipt, parseReceipt } from "../../utils/receipt";
+import { useMutation } from "@tanstack/react-query";
+import {
+  CategoryKeyType,
+  ParseReceiptRequestType,
+  ParseReceiptResponseType,
+  ReceiptItemsType,
+  ReceiptRequestType
+} from "../../types/receipt";
+import { CATEGORY } from "../../constants/constants";
+import { formatDate } from "../../utils/util";
+import ReceiptDetailsList from "./ReceiptDetailsList";
 
-type categoryType = "회식비" | "용품 구매비" | "정기 구독비" | "대관비" | "기타";
-
-const category: categoryType[] = ["회식비", "용품 구매비", "정기 구독비", "대관비", "기타"];
-
+const categoryKeys = Object.keys(CATEGORY) as CategoryKeyType[];
 interface AddModalProps {
   type: AddModalType;
   open: boolean;
@@ -17,11 +26,84 @@ interface AddModalProps {
 }
 
 const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
-  const [value, setValue] = useState<DateValueType>({
+  const [date, setDate] = useState<DateValueType>({
     startDate: null,
     endDate: null
   });
+  const [value, setValue] = useState<ReceiptRequestType>({
+    request: {
+      amount: Number(""),
+      businessName: "",
+      date: "",
+      etc: "",
+      receiptItems: []
+    }
+  });
   const [preview, setPreview] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChangeValue = (
+    key: keyof ReceiptRequestType["request"],
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setValue((prev) => {
+      return { ...prev, request: { ...prev.request, [key]: e.target.value } };
+    });
+  };
+
+  const { mutate: parseReceiptMutation } = useMutation<
+    ParseReceiptResponseType,
+    FetchErrorType,
+    ParseReceiptRequestType
+  >({
+    mutationFn: parseReceipt,
+    onSuccess: (data) => {
+      setValue((prev) => {
+        const items: ReceiptItemsType[] = data.Items.map((item) => ({
+          name: item.Description,
+          price: item.Price,
+          quantity: item.Quantity,
+          totalPrice: item.TotalPrice
+        }));
+
+        return {
+          ...prev,
+          request: {
+            ...prev.request,
+            receiptItems: items,
+            businessName: data.MerchantName,
+            amount: data.Total,
+            date: data.TransactionDate
+          }
+        };
+      });
+      setDate((prev) => ({
+        ...prev,
+        startDate: new Date(data.TransactionDate),
+        endDate: new Date(data.TransactionDate)
+      }));
+      setPreview(null);
+    },
+    onError: (err) => {
+      alert(err);
+      setPreview(null);
+    }
+  });
+
+  const { mutate: createReceiptMutation } = useMutation<
+    unknown,
+    FetchErrorType,
+    ReceiptRequestType
+  >({
+    mutationFn: createReceipt,
+    onSuccess: () => {
+      onCloseModal();
+    },
+    onError: (err) => {
+      alert(err);
+    }
+  });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -33,17 +115,33 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     };
     reader.readAsDataURL(file);
 
-    setTimeout(() => {
-      setPreview(null);
-      console.log("hihi");
-    }, 5000);
+    setValue((prev) => ({ ...prev, image: file }));
+    parseReceiptMutation({ image: file });
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const data = Object.fromEntries(fd.entries());
-    console.log(data);
+    const request = value.request;
+    if (
+      request.businessName.trim() === "" ||
+      request.amount === 0 ||
+      !request.category ||
+      request.date.trim() === ""
+    ) {
+      setError("메모를 제외한 비어있는 항목을 모두 채워주세요!");
+      return;
+    }
+
+    if (request.receiptItems.length === 0) {
+      setError("영수증 상세내역 항목이 존재하지 않습니다!");
+      return;
+    }
+
+    createReceiptMutation(value);
+  };
+
+  const handleUpdateItems = (items: ReceiptItemsType[]) => {
+    setValue((prev) => ({ ...prev, request: { ...prev.request, receiptItems: items } }));
   };
 
   let classes =
@@ -55,22 +153,28 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     classes += " h-[582px]";
   }
 
+  const handleShowDetiles = () => {
+    setShowDetails((pre) => !pre);
+  };
+
   return (
     <Modal open={open} onClose={onCloseModal}>
       <form onSubmit={handleSubmit} className={classes}>
-        {!preview && (
+        {!preview && !showDetails && (
           <>
             <h1 className="title-extra-18 text-gray-01">
               {type === "self" ? "직접 등록하기" : "스캔으로 등록하기"}
             </h1>
             <div className="flex flex-col w-full gap-5 pt-4">
-              <div className="flex flex-col w-full gap-3">
+              <div className="flex flex-col items-center w-full gap-3">
                 {type === "receipt" && <ReceiptCapture onFileChange={handleFileChange} />}
                 <Selector
                   selectTitle={"카테고리"}
-                  selectList={category}
-                  dataTitle={(data) => data}
+                  selectList={categoryKeys}
+                  dataTitle={(data) => CATEGORY[data]}
                   dataValue={(data) => data}
+                  value={value.request.category}
+                  onChange={(e) => handleChangeValue("category", e)}
                   name="category"
                 />
                 <Datepicker
@@ -84,12 +188,46 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
                   useRange={false}
                   asSingle={true}
                   primaryColor="amber"
-                  value={value}
-                  onChange={(newValue) => setValue(newValue)}
+                  value={date}
+                  onChange={(newValue) => {
+                    setDate(newValue);
+                    setValue((prev) => ({
+                      ...prev,
+                      request: {
+                        ...prev.request,
+                        date: formatDate(new Date(newValue?.startDate || ""))
+                      }
+                    }));
+                  }}
                 />
-                <Input placeholder="상호명" name="store_name" />
-                <Input placeholder="금액" name="amount" />
-                <Input placeholder="메모" name="etc" />
+                <Input
+                  placeholder="상호명"
+                  name="store_name"
+                  value={value.request.businessName}
+                  onChange={(e) => handleChangeValue("businessName", e)}
+                />
+                <Input
+                  placeholder="금액"
+                  name="amount"
+                  type="number"
+                  className="appearance-none no-spinner"
+                  value={value.request.amount === 0 ? "" : value.request.amount}
+                  onChange={(e) => handleChangeValue("amount", e)}
+                />
+                <Input
+                  placeholder="메모"
+                  name="etc"
+                  value={value.request.etc}
+                  onChange={(e) => handleChangeValue("etc", e)}
+                />
+                <button
+                  type="button"
+                  onClick={handleShowDetiles}
+                  className="text-center underline cursor-pointer text-gray-03 body-med-14"
+                >
+                  영수증 상세내역
+                </button>
+                {error && <p className="text-red-400 caption-med-12">{error}</p>}
               </div>
               <footer className="flex flex-col w-full gap-3">
                 <button className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01">
@@ -105,6 +243,13 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
               </footer>
             </div>
           </>
+        )}
+        {!preview && showDetails && (
+          <ReceiptDetailsList
+            receiptItems={value.request.receiptItems}
+            onBack={handleShowDetiles}
+            onUpdate={handleUpdateItems}
+          />
         )}
         {preview && (
           <>
