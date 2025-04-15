@@ -32,6 +32,28 @@ export async function checkDuplicateId(email: UserType["email"]) {
   return email;
 }
 
+export async function checkValidId(email: UserType["email"]) {
+  const response = await fetch(`/api/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`);
+
+  if (!response.ok) {
+    const error: FetchErrorType = new Error("이메일 중복 확인 과정에서 오류가 발생하였습니다!");
+    error.code = response.status;
+    error.info = await response.json();
+    throw error;
+  }
+
+  const { notDuplicated } = (await response.json()) as CheckDuplicateIdType;
+
+  if (notDuplicated) {
+    const error: FetchErrorType = new Error("존재하지 않는 이메일입니다!");
+    error.code = 409;
+    error.info = { errorCode: "404", message: "존재하지 않는 이메일입니다!" };
+    throw error;
+  }
+
+  return email;
+}
+
 export async function sendVerificationEmail(email: UserType["email"]) {
   try {
     const response = await axios.post(`/api/v1/email/send`, { email });
