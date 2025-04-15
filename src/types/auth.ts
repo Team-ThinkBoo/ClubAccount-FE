@@ -14,7 +14,7 @@ export interface SignupType {
   authId: UserType["email"];
   password: UserType["password"];
   passwordCheck: UserType["password"];
-  organization: UserType["organization"];
+  organization?: UserType["organization"];
 }
 
 export type SignupErrorType = {
