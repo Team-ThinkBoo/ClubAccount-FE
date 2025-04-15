@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./axiosInstance";
 import { createFetchError } from "./axios";
 import {
   ParseReceiptRequestType,
@@ -8,7 +8,7 @@ import {
 
 export async function parseReceipt({ image }: ParseReceiptRequestType) {
   try {
-    const response = await axios.post<ParseReceiptResponseType>(
+    const response = await api.post<ParseReceiptResponseType>(
       "https://kohn54c7m9.execute-api.ap-northeast-2.amazonaws.com/default/receipt-ocr",
       image,
       {
@@ -36,7 +36,7 @@ export async function createReceipt(datas: ReceiptRequestType) {
   }
 
   try {
-    const response = await axios.post("/api/v1/receipts/create", formData, {
+    const response = await api.post("/api/v1/receipts/create", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`
@@ -45,6 +45,6 @@ export async function createReceipt(datas: ReceiptRequestType) {
 
     return response.data;
   } catch (error: unknown) {
-    throw createFetchError(error, "영수증 파싱 과정에서 오류가 발생하였습니다!");
+    throw createFetchError(error, "영수증 생성 과정에서 오류가 발생하였습니다!");
   }
 }
