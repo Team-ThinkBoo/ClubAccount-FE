@@ -1,14 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import ArrowRightIcon from "../../icons/ArrowRightIcon";
 import { useAuthStore } from "../../store/useAuthStore";
+import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logout, isLoggedIn } = useAuthStore();
 
-  function handleLogout() {
-    logout();
-    navigate("/");
+  function handleAuth() {
+    if (isLoggedIn) {
+      logout();
+      navigate("/");
+    }
+    if (!isLoggedIn) {
+      navigate(`/auth?mode=${AUTH_SEARCH_PARAMS.LOGIN}`);
+    }
   }
   return (
     <>
@@ -22,8 +28,8 @@ const Profile = () => {
           <p className="text-gray-01 body-bold-16">김파산 님</p>
           <ArrowRightIcon />
         </div>
-        <p onClick={handleLogout} className="cursor-pointer caption-med-12 text-gray-03">
-          로그아웃
+        <p onClick={handleAuth} className="cursor-pointer caption-med-12 text-gray-03">
+          {isLoggedIn ? "로그아웃" : "로그인"}
         </p>
       </div>
     </>
