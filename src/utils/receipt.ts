@@ -5,10 +5,11 @@ import {
   ParseReceiptResponseType,
   ReceiptRequestType
 } from "../types/receipt";
+import axios from "axios";
 
 export async function parseReceipt({ image }: ParseReceiptRequestType) {
   try {
-    const response = await api.post<ParseReceiptResponseType>(
+    const response = await axios.post<ParseReceiptResponseType>(
       "https://kohn54c7m9.execute-api.ap-northeast-2.amazonaws.com/default/receipt-ocr",
       image,
       {
@@ -28,7 +29,6 @@ export async function createReceipt(datas: ReceiptRequestType) {
   const formData = new FormData();
   const uploaderString = JSON.stringify(datas.request);
   formData.append("request", new Blob([uploaderString], { type: "application/json" }));
-
   const token = localStorage.getItem("accessToken");
 
   if (datas.image) {
