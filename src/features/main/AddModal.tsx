@@ -132,7 +132,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
       return;
     }
 
-    if (request.receiptItems.length === 0) {
+    if (type === "receipt" && request.receiptItems.length === 0) {
       setError("영수증 상세내역 항목이 존재하지 않습니다!");
       return;
     }
