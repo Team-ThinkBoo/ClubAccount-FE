@@ -3,17 +3,19 @@ import { create } from "zustand";
 type AuthStore = {
   isLoggedIn: boolean;
   accessToken: string | null;
-  setAuth: (token: string) => void;
+  uuid: string;
+  setAuth: (token: string, uuid: string) => void;
   logout: () => void;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isLoggedIn: !!localStorage.getItem("accessToken"),
   accessToken: localStorage.getItem("accessToken"),
+  uuid: "",
 
-  setAuth: (token) => {
+  setAuth: (token, uuid) => {
     localStorage.setItem("accessToken", token);
-    set({ accessToken: token, isLoggedIn: true });
+    set({ accessToken: token, isLoggedIn: true, uuid });
   },
 
   logout: () => {

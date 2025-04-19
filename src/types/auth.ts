@@ -29,6 +29,7 @@ export interface LoginErrorType {
 
 export interface LoginResponseType {
   accessToken: string;
+  uuid: string;
 }
 
 export interface VerifyResponseType {
