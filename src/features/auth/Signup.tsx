@@ -46,7 +46,7 @@ const Signup = () => {
     mutationFn: signup,
     onSuccess: (data) => {
       console.log("✅ 회원가입 성공! 리다이렉트 실행");
-      setAuth(data.accessToken, data.uuid);
+      setAuth(data.accessToken, data.link);
       navigate("/");
     },
     onError: (err) => {
