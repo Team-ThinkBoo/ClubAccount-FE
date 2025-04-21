@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import MainNavigation from "../features/main/MainNavigation";
+import MainNavigation from "../features/receipts/MainNavigation";
 
 const MainLayout = () => {
   return (

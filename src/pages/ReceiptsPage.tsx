@@ -1,6 +1,6 @@
-import ProfileOverview from "../features/main/ProfileOverview";
-import TimelineContents from "../features/main/TimelineContents";
-import TimelineHeader from "../features/main/TimelineHeader";
+import ProfileOverview from "../features/receipts/ProfileOverview";
+import TimelineContents from "../features/receipts/TimelineContents";
+import TimelineHeader from "../features/receipts/TimelineHeader";
 import { useParams } from "react-router-dom";
 import { ParamsIds } from "../types/types";
 import { setLink } from "../utils/util";
