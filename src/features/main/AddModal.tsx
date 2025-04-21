@@ -17,6 +17,7 @@ import {
 import { CATEGORY } from "../../constants/constants";
 import { formatDate } from "../../utils/util";
 import ReceiptDetailsList from "./ReceiptDetailsList";
+import { queryClient } from "../../utils/http";
 
 const categoryKeys = Object.keys(CATEGORY) as CategoryKeyType[];
 interface AddModalProps {
@@ -99,6 +100,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     mutationFn: createReceipt,
     onSuccess: () => {
       onCloseModal();
+      queryClient.invalidateQueries({ queryKey: ["receipts"] });
     },
     onError: (err) => {
       alert(err);
