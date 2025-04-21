@@ -5,7 +5,7 @@ export const AUTH_SEARCH_PARAMS = {
 } as const;
 
 export const PARAMS_IDS = {
-  CLUB_CODE: "clubCode"
+  Link: "link"
 } as const;
 
 export const CATEGORY = {

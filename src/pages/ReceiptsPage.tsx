@@ -1,12 +1,15 @@
 import ProfileOverview from "../features/main/ProfileOverview";
 import TimelineContents from "../features/main/TimelineContents";
 import TimelineHeader from "../features/main/TimelineHeader";
-import { Await, useLoaderData } from "react-router-dom";
-import { ReceiptType } from "../types/types";
+import { Await, useLoaderData, useParams } from "react-router-dom";
+import { ParamsIds, ReceiptType } from "../types/types";
 import { Suspense } from "react";
 import SpinnerIcon from "../icons/SpinnerIcon";
+import { setLink } from "../utils/util";
 
-const MainPage = () => {
+const ReceiptsPage = () => {
+  const { link } = useParams<ParamsIds>();
+  setLink(link);
   const { data } = useLoaderData<{ data: Promise<ReceiptType[]> }>();
 
   return (
@@ -27,4 +30,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default ReceiptsPage;
