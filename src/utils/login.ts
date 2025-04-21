@@ -1,6 +1,7 @@
 import axios from "axios";
 import { LoginResponseType, LoginType } from "../types/auth";
 import { createFetchError } from "./axios";
+import api from "./axiosInstance";
 
 export async function login(loginData: LoginType) {
   try {
@@ -17,7 +18,7 @@ export async function login(loginData: LoginType) {
 export async function logoutFn() {
   try {
     const token = localStorage.getItem("accessToken");
-    const response = await axios.post(
+    const response = await api.post(
       `/api/v1/auth/logout`,
       {},
       {
