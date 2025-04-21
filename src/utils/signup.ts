@@ -90,7 +90,6 @@ export async function signup(signupData: SignupType) {
     const error: FetchErrorType = new Error("회원가입중 에러가 발생하였습니다.");
     error.code = response.status;
     error.info = await response.json();
-    console.log(error.info);
     throw error;
   }
 

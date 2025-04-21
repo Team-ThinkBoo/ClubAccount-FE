@@ -58,7 +58,6 @@ interface loadReceiptsProps {
 }
 
 export async function loadReceipts({ page, link, size, sort }: loadReceiptsProps) {
-  console.log(link);
   let api = `/api/v1/${link}/receipts?page=${page}`;
   if (size) {
     api += `&size=${size}`;

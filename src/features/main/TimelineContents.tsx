@@ -6,7 +6,7 @@ const TimelineContents = () => {
   const link = localStorage.getItem("link") || "";
   const { receipts, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useLoadReceipts(link);
-  console.log(status);
+
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
