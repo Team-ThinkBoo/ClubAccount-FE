@@ -33,7 +33,6 @@ export async function createReceipt(datas: ReceiptRequestType) {
   const formData = new FormData();
   const uploaderString = JSON.stringify(datas.request);
   formData.append("request", new Blob([uploaderString], { type: "application/json" }));
-  const token = localStorage.getItem("accessToken");
 
   if (datas.image) {
     formData.append("image", datas.image);
@@ -42,8 +41,7 @@ export async function createReceipt(datas: ReceiptRequestType) {
   try {
     const response = await api.post("/api/v1/receipts/create", formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`
+        "Content-Type": "multipart/form-data"
       }
     });
 
@@ -86,5 +84,19 @@ export async function loadReceiptDetail(link: LoginResponseType["link"], id: Rec
     return response.data;
   } catch (error: unknown) {
     throw createFetchError(error, "영수증 로딩 과정에서 오류가 발생하였습니다!");
+  }
+}
+
+export async function updateReceipt(id: ReceiptType["id"], datas: ReceiptRequestType["request"]) {
+  try {
+    const response = await api.put(`/api/v1/receipts/${id}`, datas, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "영수증 업데이트 과정에서 오류가 발생하였습니다!");
   }
 }
