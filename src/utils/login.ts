@@ -13,3 +13,23 @@ export async function login(loginData: LoginType) {
     throw createFetchError(error, "로그인 과정에서 오류가 발생하였습니다!");
   }
 }
+
+export async function logoutFn() {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const response = await axios.post(
+      `/api/v1/auth/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
+      }
+    );
+
+    return response;
+  } catch (error: unknown) {
+    throw createFetchError(error, "로그아웃 과정에서 오류가 발생하였습니다!");
+  }
+}
