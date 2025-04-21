@@ -84,6 +84,7 @@ const UpdateModalContent = ({ data, onCloseModal }: UpdateModalContentProps) => 
                 name="category"
               />
               <Datepicker
+                maxDate={new Date()}
                 inputName="date"
                 containerClassName="w-[272px] md:w-[312px] h-[41px] relative w-full text-gray-700"
                 inputClassName="w-[272px] md:w-[312px] h-[41px] gap-1 px-4 border body-med-14 text-gray-01 rounded-xl border-gray-05 focus:outline-0"
