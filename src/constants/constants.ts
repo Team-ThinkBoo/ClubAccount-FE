@@ -1,3 +1,5 @@
+import { CategoryKeyType } from "../types/receipt";
+
 export const AUTH_SEARCH_PARAMS = {
   LOGIN: "login",
   SIGNUP: "signup",
@@ -15,3 +17,5 @@ export const CATEGORY = {
   VENUE_RENTAL: "대관비",
   OTHER: "기타"
 } as const;
+
+export const categoryKeys = Object.keys(CATEGORY) as CategoryKeyType[];
