@@ -60,3 +60,9 @@ export interface LoadReceiptsResponseType {
   isFirst: boolean;
   isLast: boolean;
 }
+
+export interface LoadReceiptDetailResponseType extends ReceiptType {
+  receiptItems: ({
+    id: number;
+  } & ReceiptItemsType)[];
+}

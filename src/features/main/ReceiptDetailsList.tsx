@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ReceiptItemsType } from "../../types/receipt";
 import ArrowLeftIcon from "../../icons/ArrowLeftIcon";
+import ReceiptDetailTable from "./ReceiptDetailTable";
 
 interface ReceiptDetailsListProps {
   receiptItems: ReceiptItemsType[];
@@ -24,7 +25,7 @@ const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsLi
     ]);
   }
 
-  function handleChage(index: number, field: keyof ReceiptItemsType, value: string | number) {
+  function handleChange(index: number, field: keyof ReceiptItemsType, value: string | number) {
     setItems((prev) =>
       prev.map((item, idx) => {
         if (idx !== index) return item;
@@ -72,60 +73,12 @@ const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsLi
         <h1 className="flex-1 text-center title-extra-18 text-gray-01">영수증 상세내역</h1>
       </div>
       <div className="flex flex-col w-full h-full overflow-scroll">
-        <table>
-          <thead>
-            <tr className="text-gray-03 body-med-14">
-              <th className="py-[10px] border-[1.5px] w-4/12 border-gray-04">상품명</th>
-              <th className="py-[10px] border-[1.5px] w-3/12 border-gray-04">단가</th>
-              <th className="py-[10px] border-[1.5px] w-2/12 border-gray-04">수량</th>
-              <th className="py-[10px] border-[1.5px] w-3/12 border-gray-04">금액</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items?.map((data, index) => (
-              <tr
-                key={`${data.toString()}-${index}`}
-                className="relative text-gray-01 caption-med-12"
-              >
-                <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-                  <input
-                    className="w-full text-center"
-                    value={data.name}
-                    onChange={(e) => handleChage(index, "name", e.target.value)}
-                  />
-                </td>
-                <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-                  <input
-                    className="w-full text-center"
-                    value={data.price}
-                    onChange={(e) => handleChage(index, "price", e.target.value)}
-                  />
-                </td>
-                <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-                  <input
-                    className="w-full text-center"
-                    value={data.quantity}
-                    onChange={(e) => handleChage(index, "quantity", e.target.value)}
-                  />
-                </td>
-                <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-                  <input
-                    className="w-full text-center"
-                    value={data.totalPrice}
-                    onChange={(e) => handleChage(index, "totalPrice", e.target.value)}
-                  />
-                  <button
-                    onClick={() => handleDelete(index)}
-                    type="button"
-                    className="absolute z-10 w-5 h-5 text-xs text-white bg-red-500 rounded-full -right-6 hover:bg-red-600"
-                  >
-                    &minus;
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ReceiptDetailTable
+          receipts={items}
+          mode="change"
+          onChange={handleChange}
+          onDelete={handleDelete}
+        />
         <button
           onClick={handleAddMode}
           type="button"

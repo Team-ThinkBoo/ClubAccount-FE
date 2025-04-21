@@ -1,8 +1,9 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { loadReceipts } from "../utils/receipt";
-import { LoadReceiptsResponseType } from "../types/receipt";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { loadReceiptDetail, loadReceipts } from "../utils/receipt";
+import { LoadReceiptsResponseType, ReceiptType } from "../types/receipt";
+import { LoginResponseType } from "../types/auth";
 
-export default function useLoadReceipts(link: string) {
+export function useLoadReceipts(link: LoginResponseType["link"]) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useInfiniteQuery<LoadReceiptsResponseType>({
       queryKey: ["receipts", link],
@@ -18,5 +19,18 @@ export default function useLoadReceipts(link: string) {
     hasNextPage,
     isFetchingNextPage,
     status
+  };
+}
+
+export function useLoadReceiptDetail(link: LoginResponseType["link"], id: ReceiptType["id"]) {
+  const { data, isError, isPending } = useQuery({
+    queryKey: ["receipts", link, id],
+    queryFn: async () => await loadReceiptDetail(link, id)
+  });
+
+  return {
+    data,
+    isError,
+    isPending
   };
 }

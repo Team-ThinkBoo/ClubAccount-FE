@@ -1,12 +1,15 @@
 import api from "./axiosInstance";
 import { createFetchError } from "./axios";
 import {
+  LoadReceiptDetailResponseType,
   LoadReceiptsResponseType,
   ParseReceiptRequestType,
   ParseReceiptResponseType,
-  ReceiptRequestType
+  ReceiptRequestType,
+  ReceiptType
 } from "../types/receipt";
 import axios from "axios";
+import { LoginResponseType } from "../types/auth";
 
 export async function parseReceipt({ image }: ParseReceiptRequestType) {
   try {
@@ -68,6 +71,18 @@ export async function loadReceipts({ page, link, size, sort }: loadReceiptsProps
 
   try {
     const response = await axios.get<LoadReceiptsResponseType>(api);
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "영수증 로딩 과정에서 오류가 발생하였습니다!");
+  }
+}
+
+export async function loadReceiptDetail(link: LoginResponseType["link"], id: ReceiptType["id"]) {
+  try {
+    const response = await axios.get<LoadReceiptDetailResponseType>(
+      `/api/v1/${link}/receipts/${id}`
+    );
+
     return response.data;
   } catch (error: unknown) {
     throw createFetchError(error, "영수증 로딩 과정에서 오류가 발생하였습니다!");
