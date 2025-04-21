@@ -38,3 +38,25 @@ export interface ReceiptItemsType {
   totalPrice: number;
   quantity: number;
 }
+
+export interface ReceiptType {
+  id: number;
+  category: CategoryKeyType;
+  businessName: string;
+  date: string;
+  amount: number;
+  etc: string;
+  receiptImageUrl: string;
+}
+
+export interface LoadReceiptsResponseType {
+  content: ReceiptType[];
+  totalElements: number;
+  totalPages: number;
+  pageNumber: number;
+  pageSize: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  isFirst: boolean;
+  isLast: boolean;
+}

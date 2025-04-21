@@ -1,4 +1,5 @@
-import { ReceiptType } from "../../types/types";
+import { CATEGORY } from "../../constants/constants";
+import { ReceiptType } from "../../types/receipt";
 import { formatAmount } from "../../utils/util";
 
 interface TimelineContentCardProps {
@@ -11,11 +12,11 @@ const TimelineContentCard = ({ receipt }: TimelineContentCardProps) => {
       <div className="flex flex-col gap-4 justify-between w-[calc(75%-1rem)]">
         <div>
           <p className="body-bold-14 text-gray-01">{receipt.date.toString()}</p>
-          <p className="caption-med-12 text-gray-03">{receipt.category}</p>
+          <p className="caption-med-12 text-gray-03">{CATEGORY[receipt.category]}</p>
         </div>
 
         <div className="body-bold-16 text-gray-01">
-          <p>{receipt.store_name}</p>
+          <p>{receipt.businessName}</p>
           <p>{formatAmount(receipt.amount)}</p>
         </div>
 
@@ -24,10 +25,10 @@ const TimelineContentCard = ({ receipt }: TimelineContentCardProps) => {
         </div>
       </div>
       <div className="flex-shrink-0 w-1/4 h-full">
-        {receipt.receipt_image_url && (
+        {receipt.receiptImageUrl && (
           <img
             className="object-cover w-full h-full"
-            src={receipt.receipt_image_url}
+            src={receipt.receiptImageUrl}
             alt="영수증 이미지"
           />
         )}

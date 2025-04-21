@@ -5,7 +5,7 @@ import LogoIcon from "../../icons/LogoIcon";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const MainNavigation = () => {
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn, link } = useAuthStore();
   const location = useLocation();
 
   const menuList =
@@ -15,7 +15,7 @@ const MainNavigation = () => {
           { title: "회원가입", link: `/auth?mode=${AUTH_SEARCH_PARAMS.SIGNUP}` }
         ]
       : [
-          { title: "영수증", link: "/receipts" },
+          { title: "영수증", link: `/receipts/${link}` },
           { title: "회계록", link: "/accounting" },
           { title: "Q&A", link: "/qna" }
         ];
