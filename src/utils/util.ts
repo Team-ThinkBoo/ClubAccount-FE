@@ -12,5 +12,5 @@ export function setLink(link?: string) {
 
 export function getLink() {
   const link = localStorage.getItem("link");
-  return link;
+  return link || "";
 }
