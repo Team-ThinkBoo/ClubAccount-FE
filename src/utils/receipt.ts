@@ -10,6 +10,7 @@ import {
 } from "../types/receipt";
 import axios from "axios";
 import { LoginResponseType } from "../types/auth";
+import { UpdateReceiptProps } from "../hooks/useReceipts";
 
 export async function parseReceipt({ image }: ParseReceiptRequestType) {
   try {
@@ -87,7 +88,7 @@ export async function loadReceiptDetail(link: LoginResponseType["link"], id: Rec
   }
 }
 
-export async function updateReceipt(id: ReceiptType["id"], datas: ReceiptRequestType["request"]) {
+export async function updateReceipt({ id, datas }: UpdateReceiptProps) {
   try {
     const response = await api.put(`/api/v1/receipts/${id}`, datas, {
       headers: {
