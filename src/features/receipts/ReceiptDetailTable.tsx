@@ -1,4 +1,5 @@
 import { ReceiptItemsType } from "../../types/receipt";
+import { formatNumber } from "../../utils/util";
 
 interface ViewModeProps {
   receipts?: ReceiptItemsType[];
@@ -15,7 +16,13 @@ interface ChangeModeProps {
 type ReceiptDetailTableProps = ViewModeProps | ChangeModeProps;
 
 const ReceiptDetailTable = (props: ReceiptDetailTableProps) => {
-  const { receipts, mode } = props;
+  const { receipts: rowReceipts, mode } = props;
+
+  const receipts = rowReceipts?.map((item) => ({
+    ...item,
+    price: formatNumber(item.price),
+    totalPrice: formatNumber(item.totalPrice)
+  }));
 
   return (
     <table>

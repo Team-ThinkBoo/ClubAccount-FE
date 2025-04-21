@@ -14,3 +14,7 @@ export function getLink() {
   const link = localStorage.getItem("link");
   return link || "";
 }
+
+export function formatNumber(number: number | string) {
+  return Number(parseFloat(number.toString()).toFixed(0));
+}
