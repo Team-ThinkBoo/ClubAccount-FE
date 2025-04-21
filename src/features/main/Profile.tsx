@@ -2,15 +2,24 @@ import { useNavigate } from "react-router-dom";
 import ArrowRightIcon from "../../icons/ArrowRightIcon";
 import { useAuthStore } from "../../store/useAuthStore";
 import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
+import { useMutation } from "@tanstack/react-query";
+import { logoutFn } from "../../utils/login";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { logout, isLoggedIn } = useAuthStore();
 
-  function handleAuth() {
-    if (isLoggedIn) {
+  const { mutate } = useMutation({
+    mutationFn: logoutFn,
+    onSuccess: () => {
       logout();
       navigate("/");
+    }
+  });
+
+  function handleAuth() {
+    if (isLoggedIn) {
+      mutate();
     }
     if (!isLoggedIn) {
       navigate(`/auth?mode=${AUTH_SEARCH_PARAMS.LOGIN}`);
