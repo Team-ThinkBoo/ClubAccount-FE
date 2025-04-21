@@ -1,5 +1,6 @@
 import { ReceiptItemsType } from "../../types/receipt";
 import { formatNumber } from "../../utils/util";
+import ReceiptDetailTableCell from "./ReceiptDetailTableCell";
 
 interface ViewModeProps {
   receipts?: ReceiptItemsType[];
@@ -38,44 +39,38 @@ const ReceiptDetailTable = (props: ReceiptDetailTableProps) => {
         {receipts?.map((data, index) => (
           <tr key={`${data.toString()}-${index}`} className="relative text-gray-01 caption-med-12">
             <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-              {mode === "change" && (
-                <input
-                  className="w-full text-center"
-                  value={data.name}
-                  onChange={(e) => props.onChange(index, "name", e.target.value)}
-                />
-              )}
-              {mode === "view" && <div className="w-full text-center">{data.name}</div>}
+              <ReceiptDetailTableCell
+                mode={mode}
+                value={data.name}
+                onChange={(e) => mode === "change" && props.onChange(index, "name", e.target.value)}
+              />
             </td>
             <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-              {mode === "change" && (
-                <input
-                  className="w-full text-center"
-                  value={data.price}
-                  onChange={(e) => props.onChange(index, "price", e.target.value)}
-                />
-              )}
-              {mode === "view" && <div className="w-full text-center">{data.price}</div>}
+              <ReceiptDetailTableCell
+                mode={mode}
+                value={data.price}
+                onChange={(e) =>
+                  mode === "change" && props.onChange(index, "price", e.target.value)
+                }
+              />
             </td>
             <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-              {mode === "change" && (
-                <input
-                  className="w-full text-center"
-                  value={data.quantity}
-                  onChange={(e) => props.onChange(index, "quantity", e.target.value)}
-                />
-              )}
-              {mode === "view" && <div className="w-full text-center">{data.quantity}</div>}
+              <ReceiptDetailTableCell
+                mode={mode}
+                value={data.quantity}
+                onChange={(e) =>
+                  mode === "change" && props.onChange(index, "quantity", e.target.value)
+                }
+              />
             </td>
             <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-              {mode === "change" && (
-                <input
-                  className="w-full text-center"
-                  value={data.totalPrice}
-                  onChange={(e) => props.onChange(index, "totalPrice", e.target.value)}
-                />
-              )}
-              {mode === "view" && <div className="w-full text-center">{data.totalPrice}</div>}
+              <ReceiptDetailTableCell
+                mode={mode}
+                value={data.totalPrice}
+                onChange={(e) =>
+                  mode === "change" && props.onChange(index, "totalPrice", e.target.value)
+                }
+              />
               {mode === "change" && (
                 <button
                   onClick={() => mode === "change" && props.onDelete(index)}
