@@ -8,18 +8,15 @@ import ReceiptCapture from "./ReceiptCapture";
 import { createReceipt, parseReceipt } from "../../utils/receipt";
 import { useMutation } from "@tanstack/react-query";
 import {
-  CategoryKeyType,
   ParseReceiptRequestType,
   ParseReceiptResponseType,
   ReceiptItemsType,
   ReceiptRequestType
 } from "../../types/receipt";
-import { CATEGORY } from "../../constants/constants";
+import { CATEGORY, categoryKeys } from "../../constants/constants";
 import { formatDate } from "../../utils/util";
 import ReceiptDetailsList from "./ReceiptDetailsList";
 import { queryClient } from "../../utils/http";
-
-const categoryKeys = Object.keys(CATEGORY) as CategoryKeyType[];
 interface AddModalProps {
   type: AddModalType;
   open: boolean;
@@ -126,6 +123,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     const request = value.request;
     if (
       request.businessName.trim() === "" ||
+      !request.amount ||
       request.amount === 0 ||
       !request.category ||
       request.date.trim() === ""
@@ -197,7 +195,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
                       ...prev,
                       request: {
                         ...prev.request,
-                        date: formatDate(new Date(newValue?.startDate || ""))
+                        date: formatDate(!newValue?.startDate ? null : new Date(newValue.startDate))
                       }
                     }));
                   }}
