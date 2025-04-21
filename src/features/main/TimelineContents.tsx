@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import useLoadReceipts from "../../hooks/useReceipts";
 import TimelineContentCard from "./TimelineContentCard";
+import { useLoadReceipts } from "../../hooks/useReceipts";
 
 const TimelineContents = () => {
   const link = localStorage.getItem("link") || "";
