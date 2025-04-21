@@ -1,6 +1,7 @@
 import api from "./axiosInstance";
 import { createFetchError } from "./axios";
 import {
+  LoadReceiptsResponseType,
   ParseReceiptRequestType,
   ParseReceiptResponseType,
   ReceiptRequestType
@@ -46,5 +47,30 @@ export async function createReceipt(datas: ReceiptRequestType) {
     return response.data;
   } catch (error: unknown) {
     throw createFetchError(error, "영수증 생성 과정에서 오류가 발생하였습니다!");
+  }
+}
+
+interface loadReceiptsProps {
+  page: number;
+  link: string;
+  size?: number;
+  sort?: "createAt,asc" | "createAt,desc";
+}
+
+export async function loadReceipts({ page, link, size, sort }: loadReceiptsProps) {
+  console.log(link);
+  let api = `/api/v1/${link}/receipts?page=${page}`;
+  if (size) {
+    api += `&size=${size}`;
+  }
+  if (sort) {
+    api += `&sort=${sort}`;
+  }
+
+  try {
+    const response = await axios.get<LoadReceiptsResponseType>(api);
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "영수증 로딩 과정에서 오류가 발생하였습니다!");
   }
 }
