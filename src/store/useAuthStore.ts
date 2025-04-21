@@ -22,6 +22,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   logout: () => {
     localStorage.removeItem("accessToken");
-    set({ accessToken: null, isLoggedIn: false });
+    localStorage.removeItem("link");
+
+    set({ accessToken: null, isLoggedIn: false, link: null });
   }
 }));
