@@ -1,6 +1,5 @@
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import Selector from "../../components/Selector";
-import ReceiptCapture from "./ReceiptCapture";
 import Input from "../../components/Input";
 import { CATEGORY, categoryKeys } from "../../constants/constants";
 import {
@@ -73,7 +72,6 @@ const UpdateModalContent = ({ data, onCloseModal }: UpdateModalContentProps) => 
           <h1 className="title-extra-18 text-gray-01">수정하기</h1>
           <div className="flex flex-col w-full gap-5 pt-4">
             <div className="flex flex-col items-center w-full gap-3">
-              <ReceiptCapture onFileChange={() => {}} />
               <Selector
                 selectTitle={"카테고리"}
                 selectList={categoryKeys}
