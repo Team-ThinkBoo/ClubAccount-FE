@@ -3,6 +3,8 @@ import { formatAmount, getLink } from "../../utils/util";
 import ReceiptDetailTable from "./ReceiptDetailTable";
 import { CATEGORY } from "../../constants/constants";
 import { useLoadReceiptDetail } from "../../hooks/useReceipts";
+import { useState } from "react";
+import UpdateModalContent from "./UpdateModalContent";
 
 interface ReceiptDetailModalProps {
   id: number;
@@ -11,8 +13,13 @@ interface ReceiptDetailModalProps {
 }
 
 const ReceiptDetailModal = ({ id, open, onCloseModal }: ReceiptDetailModalProps) => {
+  const [mode, setMode] = useState<"view" | "edit">("view");
   const link = getLink();
   const { data, isPending } = useLoadReceiptDetail(link, id);
+
+  function handleMode(mode: "view" | "edit") {
+    setMode(mode);
+  }
 
   if (isPending || !data) return null;
 
@@ -20,7 +27,7 @@ const ReceiptDetailModal = ({ id, open, onCloseModal }: ReceiptDetailModalProps)
     <Modal open={open} onClose={onCloseModal}>
       <div className="w-[312px] md:w-[368px] h-[640px] rounded-2xl bg-white flex flex-col justify-center items-center py-8 px-5 gap-6">
         {isPending && <p className="text-center">로딩중...</p>}
-        {!isPending && (
+        {!isPending && mode === "view" && (
           <>
             <div className="flex w-full gap-4">
               <div className="flex-shrink-0 w-1/4 h-full">
@@ -52,7 +59,10 @@ const ReceiptDetailModal = ({ id, open, onCloseModal }: ReceiptDetailModalProps)
               <ReceiptDetailTable mode="view" receipts={data.receiptItems} />
             </div>
             <footer className="flex flex-col w-full gap-3">
-              <button className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01">
+              <button
+                onClick={() => handleMode("edit")}
+                className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01"
+              >
                 수정하기
               </button>
               <button
@@ -65,6 +75,7 @@ const ReceiptDetailModal = ({ id, open, onCloseModal }: ReceiptDetailModalProps)
             </footer>
           </>
         )}
+        {mode === "edit" && <UpdateModalContent data={data} onCloseModal={onCloseModal} />}
       </div>
     </Modal>
   );
