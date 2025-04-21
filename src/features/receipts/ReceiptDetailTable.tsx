@@ -38,14 +38,18 @@ const ReceiptDetailTable = (props: ReceiptDetailTableProps) => {
       <tbody>
         {receipts?.map((data, index) => (
           <tr key={`${data.toString()}-${index}`} className="relative text-gray-01 caption-med-12">
-            <td className="py-[10px] text-center border-[1.5px] border-gray-04">
-              <ReceiptDetailTableCell
-                mode={mode}
-                value={data.name}
-                onChange={(e) => mode === "change" && props.onChange(index, "name", e.target.value)}
-              />
+            <td className="group py-[10px] w-4/12 max-w-24 text-center border-[1.5px] border-gray-04">
+              <div className="w-full group">
+                <ReceiptDetailTableCell
+                  mode={mode}
+                  value={data.name}
+                  onChange={(e) =>
+                    mode === "change" && props.onChange(index, "name", e.target.value)
+                  }
+                />
+              </div>
             </td>
-            <td className="py-[10px] text-center border-[1.5px] border-gray-04">
+            <td className="py-[10px] w-3/12 text-center border-[1.5px] border-gray-04">
               <ReceiptDetailTableCell
                 mode={mode}
                 value={data.price}
@@ -54,7 +58,7 @@ const ReceiptDetailTable = (props: ReceiptDetailTableProps) => {
                 }
               />
             </td>
-            <td className="py-[10px] text-center border-[1.5px] border-gray-04">
+            <td className="py-[10px] w-2/12 text-center border-[1.5px] border-gray-04">
               <ReceiptDetailTableCell
                 mode={mode}
                 value={data.quantity}
@@ -63,7 +67,7 @@ const ReceiptDetailTable = (props: ReceiptDetailTableProps) => {
                 }
               />
             </td>
-            <td className="py-[10px] text-center border-[1.5px] border-gray-04">
+            <td className="py-[10px] w-3/12 text-center border-[1.5px] border-gray-04">
               <ReceiptDetailTableCell
                 mode={mode}
                 value={data.totalPrice}
