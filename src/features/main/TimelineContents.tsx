@@ -1,4 +1,4 @@
-import { ReceiptType } from "../../types/types";
+import { ReceiptType } from "../../types/receipt";
 import TimelineContentCard from "./TimelineContentCard";
 
 interface TimelineContentsProps {
