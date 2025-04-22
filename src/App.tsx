@@ -6,6 +6,7 @@ import MainLayout from "./pages/MainLayout";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/http";
 import ReceiptsPage from "./pages/ReceiptsPage";
+import MyPage from "./pages/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,11 @@ const router = createBrowserRouter([
         element: <ReceiptsPage />
       }
     ]
+  },
+  {
+    path: "/mypage",
+    element: <AuthLayout />,
+    children: [{ index: true, element: <MyPage /> }]
   },
   {
     path: "/auth",
