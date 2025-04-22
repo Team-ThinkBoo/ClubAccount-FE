@@ -4,7 +4,6 @@ import Modal from "../../components/Modal";
 import Selector from "../../components/Selector";
 import { AddModalType, FetchErrorType } from "../../types/types";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
-import ReceiptCapture from "./ReceiptCapture";
 import { createReceipt, parseReceipt } from "../../utils/receipt";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -17,6 +16,7 @@ import { CATEGORY, categoryKeys } from "../../constants/constants";
 import { formatDate } from "../../utils/util";
 import ReceiptDetailsList from "./ReceiptDetailsList";
 import { queryClient } from "../../utils/http";
+import Capture from "@/components/Capture";
 interface AddModalProps {
   type: AddModalType;
   open: boolean;
@@ -167,7 +167,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
             </h1>
             <div className="flex flex-col w-full gap-5 pt-4">
               <div className="flex flex-col items-center w-full gap-3">
-                {type === "receipt" && <ReceiptCapture onFileChange={handleFileChange} />}
+                {type === "receipt" && <Capture onFileChange={handleFileChange} />}
                 <Selector
                   selectTitle={"카테고리"}
                   selectList={categoryKeys}
