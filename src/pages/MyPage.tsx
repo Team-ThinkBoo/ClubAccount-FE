@@ -17,15 +17,16 @@ const MyPage = () => {
         마이 페이지
       </h1>
       <img
+        onClick={() => handleMode("edit")}
         src={defaultProfile}
         alt="프로필 이미지"
-        className="w-[88px] h-[88px] object-cover rounded-full "
+        className="w-[88px] h-[88px] object-cover rounded-full cursor-pointer"
       />
       <div className="flex flex-col items-center justify-center w-full gap-4">
         {mode === "view" && <ViewContent mode={mode} />}
         {mode === "edit" && <EditContent mode={mode} />}
       </div>
-      <div className="w-full">
+      <div className="flex justify-center w-full">
         {mode === "view" && <Button onClick={() => handleMode("edit")}>회원정보 수정</Button>}
         {mode === "edit" && (
           <div className="flex justify-center gap-3">
