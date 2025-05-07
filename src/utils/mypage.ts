@@ -1,4 +1,4 @@
-import { ProfileType } from "@/types/mypage";
+import { ChangePWRequestType, ProfileType } from "@/types/mypage";
 import { createFetchError } from "./axios";
 import api from "./axiosInstance";
 
@@ -30,6 +30,17 @@ export async function getProfile() {
 export async function patchLink() {
   try {
     const response = await api.patch("/api/v1/profile/regenerate-link");
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "사용자 링크 수정 과정에서 오류가 발생하였습니다!");
+  }
+}
+
+export async function patchPassword(data: ChangePWRequestType) {
+  try {
+    const response = await api.patch("/api/v1/profile/password", data, {
+      headers: { "Content-Type": "application/json" }
+    });
     return response.data;
   } catch (error: unknown) {
     throw createFetchError(error, "사용자 링크 수정 과정에서 오류가 발생하였습니다!");

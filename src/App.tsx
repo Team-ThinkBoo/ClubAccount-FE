@@ -9,6 +9,7 @@ import ReceiptsPage from "./pages/ReceiptsPage";
 import MyPage from "./pages/MyPage";
 import { Toaster } from "sonner";
 import EditEmailPage from "./pages/EditEmailPage";
+import EditPasswordPage from "./pages/EditPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,8 @@ const router = createBrowserRouter([
     element: <AuthLayout />,
     children: [
       { index: true, element: <MyPage /> },
-      { path: "edit/email", element: <EditEmailPage /> }
+      { path: "edit/email", element: <EditEmailPage /> },
+      { path: "edit/password", element: <EditPasswordPage /> }
     ]
   },
   {

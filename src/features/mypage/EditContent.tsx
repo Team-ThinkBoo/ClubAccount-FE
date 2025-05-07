@@ -49,7 +49,7 @@ const EditContent = ({ mode, info }: EditContentProps) => {
         mode={mode}
         defaultValue="1231231212"
         disabled
-        Button={<EditButton />}
+        Button={<EditButton onClick={() => handleNavigate("edit/password")} />}
       />
       <div className="mt-6">
         <button
