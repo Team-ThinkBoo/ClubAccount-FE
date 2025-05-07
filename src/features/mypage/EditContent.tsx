@@ -2,10 +2,11 @@ import { ButtonHTMLAttributes, useState } from "react";
 import LabelInput from "./LabelInput";
 import { useNavigate } from "react-router-dom";
 import { usePatchLick } from "@/hooks/useProfile";
+import { ProfileType } from "@/types/mypage";
 
 interface EditContentProps {
   mode: "edit";
-  dept: string;
+  info: ProfileType;
 }
 
 function EditButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
@@ -19,9 +20,9 @@ function EditButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
   );
 }
 
-const EditContent = ({ mode, dept }: EditContentProps) => {
+const EditContent = ({ mode, info }: EditContentProps) => {
   const navigate = useNavigate();
-  const [department, setDepartment] = useState(dept);
+  const [department, setDepartment] = useState(info.department);
   const { mutate: newLinkMutation } = usePatchLick();
 
   function handleNavigate(href: string) {
@@ -38,7 +39,7 @@ const EditContent = ({ mode, dept }: EditContentProps) => {
       <LabelInput
         labelTitle="이메일"
         mode={mode}
-        defaultValue="test@test.com"
+        defaultValue={info.email}
         disabled
         Button={<EditButton onClick={() => handleNavigate("edit/email")} />}
       />

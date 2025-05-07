@@ -50,7 +50,7 @@ const MyPage = () => {
         />
         <div className="flex flex-col items-center justify-center w-full gap-4">
           {mode === "view" && data && <ViewContent mode={mode} info={data} />}
-          {mode === "edit" && data && <EditContent mode={mode} dept={data.department} />}
+          {mode === "edit" && data && <EditContent mode={mode} info={data} />}
         </div>
         <div className="flex justify-center w-full">
           {mode === "view" && <Button onClick={() => handleMode("edit")}>회원정보 수정</Button>}
