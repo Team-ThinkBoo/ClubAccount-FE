@@ -27,7 +27,7 @@ const Login = () => {
     onSuccess: (data) => {
       console.log("✅ 로그인 성공! 리다이렉트 실행");
 
-      setAuth(data.accessToken, data.link);
+      setAuth(data.accessToken, data.link, authIdRef.current?.value || "");
       navigate("/");
     },
     onError: (err) => {

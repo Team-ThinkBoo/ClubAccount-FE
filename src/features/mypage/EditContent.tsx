@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 import LabelInput from "./LabelInput";
+import { useNavigate } from "react-router-dom";
 
 interface EditContentProps {
   mode: "edit";
@@ -17,10 +18,20 @@ function EditButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
 }
 
 const EditContent = ({ mode }: EditContentProps) => {
+  const navigate = useNavigate();
+
+  function handleNavigate(href: string) {
+    navigate(href);
+  }
   return (
     <>
       <LabelInput labelTitle="조직명" mode={mode} value="파산한 형제들" />
-      <LabelInput labelTitle="이메일" mode={mode} value="test@test.com" Button={<EditButton />} />
+      <LabelInput
+        labelTitle="이메일"
+        mode={mode}
+        value="test@test.com"
+        Button={<EditButton onClick={() => handleNavigate("edit/email")} />}
+      />
       <LabelInput
         labelTitle="비밀번호"
         type="password"

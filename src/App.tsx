@@ -8,6 +8,7 @@ import { queryClient } from "./utils/http";
 import ReceiptsPage from "./pages/ReceiptsPage";
 import MyPage from "./pages/MyPage";
 import { Toaster } from "sonner";
+import EditEmailPage from "./pages/EditEmailPage";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/mypage",
     element: <AuthLayout />,
-    children: [{ index: true, element: <MyPage /> }]
+    children: [
+      { index: true, element: <MyPage /> },
+      { path: "edit/email", element: <EditEmailPage /> }
+    ]
   },
   {
     path: "/auth",
