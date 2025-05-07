@@ -18,3 +18,11 @@ export interface ChangePWRequestType {
   newPassword: UserType["password"];
   confirmPassword: UserType["password"];
 }
+
+export interface ChnageProfileType {
+  profileImage?: File;
+  profile?: {
+    organization?: string;
+    authId?: string;
+  };
+}

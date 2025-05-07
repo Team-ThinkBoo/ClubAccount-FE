@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, useState } from "react";
+import { ButtonHTMLAttributes, ChangeEvent } from "react";
 import LabelInput from "./LabelInput";
 import { useNavigate } from "react-router-dom";
 import { usePatchLick } from "@/hooks/useProfile";
@@ -7,6 +7,8 @@ import { ProfileType } from "@/types/mypage";
 interface EditContentProps {
   mode: "edit";
   info: ProfileType;
+  department: string;
+  onChnage: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function EditButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
@@ -20,9 +22,8 @@ function EditButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
   );
 }
 
-const EditContent = ({ mode, info }: EditContentProps) => {
+const EditContent = ({ mode, department, info, onChnage }: EditContentProps) => {
   const navigate = useNavigate();
-  const [department, setDepartment] = useState(info.department);
   const { mutate: newLinkMutation } = usePatchLick();
 
   function handleNavigate(href: string) {
@@ -30,12 +31,7 @@ const EditContent = ({ mode, info }: EditContentProps) => {
   }
   return (
     <>
-      <LabelInput
-        labelTitle="조직명"
-        mode={mode}
-        value={department}
-        onChange={(e) => setDepartment(e.target.value)}
-      />
+      <LabelInput labelTitle="조직명" mode={mode} value={department} onChange={onChnage} />
       <LabelInput
         labelTitle="이메일"
         mode={mode}

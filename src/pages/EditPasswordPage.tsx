@@ -6,6 +6,7 @@ import { SignupErrorType, SignupType } from "@/types/auth";
 import { ChangePasswordType } from "@/types/mypage";
 import { changeProfilePwSchema, passwordCheckSchema, passwordSchema } from "@/utils/schemas";
 import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const schemaMap = {
   password: passwordSchema,
@@ -13,6 +14,7 @@ const schemaMap = {
 } as const;
 
 const EditPasswordPage = () => {
+  const navigate = useNavigate();
   const [curPW, setCurPW] = useState("");
   const [password, setPassword] = useState<ChangePasswordType>({
     password: "",
@@ -67,7 +69,10 @@ const EditPasswordPage = () => {
         <PasswordWithConfirm errors={errors} onChange={handleSignupInput} />
       </div>
       <div className="flex justify-center gap-3">
-        <button className="w-[130px] md:w-[150px] h-12 px-4 py-3 rounded-lg body-bold-16 text-gray-03 bg-gray-06">
+        <button
+          onClick={() => navigate(-1)}
+          className="w-[130px] md:w-[150px] h-12 px-4 py-3 rounded-lg body-bold-16 text-gray-03 bg-gray-06"
+        >
           돌아가기
         </button>
         <button
