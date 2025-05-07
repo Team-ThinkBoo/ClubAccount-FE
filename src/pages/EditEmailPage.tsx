@@ -1,6 +1,6 @@
 import LabelInput from "@/features/mypage/LabelInput";
+import { useLoadProfile } from "@/hooks/useProfile";
 import { useValidator } from "@/hooks/useValidator";
-import { useAuthStore } from "@/store/useAuthStore";
 import {
   LoginResponseType,
   LoginType,
@@ -10,6 +10,7 @@ import {
 } from "@/types/auth";
 import { FetchErrorType } from "@/types/types";
 import { UserType } from "@/types/user";
+import { queryClient } from "@/utils/http";
 import { login } from "@/utils/login";
 import { patchEmail } from "@/utils/mypage";
 import { authIdSchema, loginSchema } from "@/utils/schemas";
@@ -39,7 +40,8 @@ const EditEmailPage = () => {
   const [password, setPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [verifyCode, setVerifyCode] = useState("");
-  const { email } = useAuthStore();
+
+  const { data } = useLoadProfile();
 
   const navigate = useNavigate();
 
@@ -62,7 +64,7 @@ const EditEmailPage = () => {
 
   const handlePasswordCheck = () => {
     const loginData = {
-      authId: email,
+      authId: data?.email || "",
       password: password
     };
 
@@ -121,6 +123,7 @@ const EditEmailPage = () => {
     mutationFn: patchEmail,
     onSuccess: () => {
       toast.success("✅ 이메일이 변경되었습니다!");
+      queryClient.invalidateQueries({ queryKey: ["profile"], refetchType: "none" });
       navigate(-1);
     },
     onError: (err) => {
@@ -145,7 +148,7 @@ const EditEmailPage = () => {
         이메일 변경
       </h1>
       <div className="flex flex-col items-center justify-center w-full gap-4">
-        <LabelInput labelTitle="현재 이메일" mode="edit" defaultValue={email || ""} />
+        <LabelInput labelTitle="현재 이메일" mode="edit" defaultValue={data?.email || ""} />
         <LabelInput
           id="password"
           labelTitle="비밀번호"

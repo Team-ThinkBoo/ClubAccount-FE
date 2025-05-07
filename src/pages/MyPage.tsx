@@ -4,10 +4,13 @@ import ViewContent from "@/features/mypage/ViewContent";
 import EditContent from "@/features/mypage/EditContent";
 import { useState } from "react";
 import EditProfileModal from "@/features/mypage/EditProfileModal";
+import { useLoadProfile } from "@/hooks/useProfile";
 
 const MyPage = () => {
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [onEditProfileImg, setOnEditProfileImg] = useState(false);
+
+  const { data } = useLoadProfile();
 
   function handleMode(mode: "view" | "edit") {
     setMode(mode);
@@ -29,12 +32,12 @@ const MyPage = () => {
         </h1>
         <img
           onClick={() => (mode === "view" ? handleMode("edit") : handleOpenModal())}
-          src={defaultProfile}
+          src={data?.profileUrl || defaultProfile}
           alt="프로필 이미지"
           className="w-[88px] h-[88px] object-cover rounded-full cursor-pointer"
         />
         <div className="flex flex-col items-center justify-center w-full gap-4">
-          {mode === "view" && <ViewContent mode={mode} />}
+          {mode === "view" && data && <ViewContent mode={mode} info={data} />}
           {mode === "edit" && <EditContent mode={mode} />}
         </div>
         <div className="flex justify-center w-full">
