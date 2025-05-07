@@ -7,6 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/http";
 import ReceiptsPage from "./pages/ReceiptsPage";
 import MyPage from "./pages/MyPage";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Toaster richColors position="bottom-center" />
     </QueryClientProvider>
   );
 }
