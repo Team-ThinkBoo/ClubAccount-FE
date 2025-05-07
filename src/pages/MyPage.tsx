@@ -2,18 +2,23 @@ import Button from "@/components/Button";
 import defaultProfile from "/defaultProfile.png";
 import ViewContent from "@/features/mypage/ViewContent";
 import EditContent from "@/features/mypage/EditContent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditProfileModal from "@/features/mypage/EditProfileModal";
 import { useLoadProfile } from "@/hooks/useProfile";
+import { useSearchParams } from "react-router-dom";
 
 const MyPage = () => {
-  const [mode, setMode] = useState<"view" | "edit">("view");
+  const [searchParam, setSearchParam] = useSearchParams();
+  const [mode, setMode] = useState<"view" | "edit">(
+    (searchParam.get("mode") as "view" | "edit") || "view"
+  );
   const [onEditProfileImg, setOnEditProfileImg] = useState(false);
 
   const { data } = useLoadProfile();
 
   function handleMode(mode: "view" | "edit") {
     setMode(mode);
+    setSearchParam({ mode });
   }
 
   function handleCloseModal() {
@@ -22,6 +27,13 @@ const MyPage = () => {
   function handleOpenModal() {
     setOnEditProfileImg(true);
   }
+
+  useEffect(() => {
+    const param = searchParam.get("mode");
+    if (param === "view" || param === "edit") {
+      setMode(param);
+    }
+  }, [searchParam]);
 
   return (
     <>
@@ -38,7 +50,7 @@ const MyPage = () => {
         />
         <div className="flex flex-col items-center justify-center w-full gap-4">
           {mode === "view" && data && <ViewContent mode={mode} info={data} />}
-          {mode === "edit" && <EditContent mode={mode} />}
+          {mode === "edit" && data && <EditContent mode={mode} dept={data.department} />}
         </div>
         <div className="flex justify-center w-full">
           {mode === "view" && <Button onClick={() => handleMode("edit")}>회원정보 수정</Button>}

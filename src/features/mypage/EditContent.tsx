@@ -1,9 +1,11 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, useState } from "react";
 import LabelInput from "./LabelInput";
 import { useNavigate } from "react-router-dom";
+import { usePatchLick } from "@/hooks/useProfile";
 
 interface EditContentProps {
   mode: "edit";
+  dept: string;
 }
 
 function EditButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
@@ -17,31 +19,42 @@ function EditButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
   );
 }
 
-const EditContent = ({ mode }: EditContentProps) => {
+const EditContent = ({ mode, dept }: EditContentProps) => {
   const navigate = useNavigate();
+  const [department, setDepartment] = useState(dept);
+  const { mutate: newLinkMutation } = usePatchLick();
 
   function handleNavigate(href: string) {
     navigate(href);
   }
   return (
     <>
-      <LabelInput labelTitle="조직명" mode={mode} value="파산한 형제들" />
+      <LabelInput
+        labelTitle="조직명"
+        mode={mode}
+        value={department}
+        onChange={(e) => setDepartment(e.target.value)}
+      />
       <LabelInput
         labelTitle="이메일"
         mode={mode}
-        value="test@test.com"
+        defaultValue="test@test.com"
+        disabled
         Button={<EditButton onClick={() => handleNavigate("edit/email")} />}
       />
       <LabelInput
         labelTitle="비밀번호"
         type="password"
         mode={mode}
-        value="asdf"
+        defaultValue="1231231212"
+        disabled
         Button={<EditButton />}
       />
-      <LabelInput labelTitle="비밀번호 확인" type="password" mode={mode} value="asdf" />
       <div className="mt-6">
-        <button className="px-4 py-2 rounded-lg body-med-14 text-gray-02 bg-warm-gray-02">
+        <button
+          onClick={() => newLinkMutation()}
+          className="px-4 py-2 rounded-lg body-med-14 text-gray-02 bg-warm-gray-02"
+        >
           일반 사용자 링크 재발급
         </button>
       </div>

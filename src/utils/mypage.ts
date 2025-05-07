@@ -23,6 +23,15 @@ export async function getProfile() {
     const response = await api.get("/api/v1/profile");
     return response.data as ProfileType;
   } catch (error: unknown) {
-    throw createFetchError(error, "이메일 수정 과정에서 오류가 발생하였습니다!");
+    throw createFetchError(error, "프로필 정보 로드 과정에서 오류가 발생하였습니다!");
+  }
+}
+
+export async function patchLink() {
+  try {
+    const response = await api.patch("/api/v1/profile/regenerate-link");
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "사용자 링크 수정 과정에서 오류가 발생하였습니다!");
   }
 }
