@@ -1,12 +1,12 @@
+import CameraIcon from "@/icons/CameraIcon";
+import FolderIcon from "@/icons/FolderIcon";
 import { ChangeEvent, useRef } from "react";
-import CameraIcon from "../../icons/CameraIcon";
-import FolderIcon from "../../icons/FolderIcon";
 
 interface ReceiptCaptureProps {
   onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ReceiptCapture = ({ onFileChange }: ReceiptCaptureProps) => {
+const Capture = ({ onFileChange }: ReceiptCaptureProps) => {
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -50,4 +50,4 @@ const ReceiptCapture = ({ onFileChange }: ReceiptCaptureProps) => {
   );
 };
 
-export default ReceiptCapture;
+export default Capture;

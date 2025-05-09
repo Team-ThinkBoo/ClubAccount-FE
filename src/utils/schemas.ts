@@ -87,3 +87,18 @@ export const loginSchema = z
       });
     }
   });
+
+export const changeProfilePwSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "🔒 비밀번호는 최소 8자 이상이어야 합니다.")
+      .regex(/[A-Za-z]/, "🔠 문자를 포함해야 합니다.")
+      .regex(/[0-9]/, "🔢 숫자를 포함해야 합니다.")
+      .regex(/[!@#$%^&*]/, "🔣 특수문자(!@#$%^&*)를 포함해야 합니다."),
+    passwordCheck: z.string()
+  })
+  .refine((data) => data.password === data.passwordCheck, {
+    path: ["passwordCheck"],
+    message: "❌ 비밀번호가 일치하지 않습니다!"
+  });

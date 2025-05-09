@@ -6,6 +6,10 @@ import MainLayout from "./pages/MainLayout";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/http";
 import ReceiptsPage from "./pages/ReceiptsPage";
+import MyPage from "./pages/MyPage";
+import { Toaster } from "sonner";
+import EditEmailPage from "./pages/EditEmailPage";
+import EditPasswordPage from "./pages/EditPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +23,15 @@ const router = createBrowserRouter([
     ]
   },
   {
+    path: "/mypage",
+    element: <AuthLayout />,
+    children: [
+      { index: true, element: <MyPage /> },
+      { path: "edit/email", element: <EditEmailPage /> },
+      { path: "edit/password", element: <EditPasswordPage /> }
+    ]
+  },
+  {
     path: "/auth",
     element: <AuthLayout />,
     children: [{ index: true, element: <AuthPage /> }]
@@ -29,6 +42,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Toaster richColors position="bottom-center" />
     </QueryClientProvider>
   );
 }
