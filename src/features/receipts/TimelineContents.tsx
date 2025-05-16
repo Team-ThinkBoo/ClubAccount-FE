@@ -1,11 +1,28 @@
 import { useEffect, useRef } from "react";
 import TimelineContentCard from "./TimelineContentCard";
 import { useLoadReceipts } from "../../hooks/useReceipts";
+import { DateValueType } from "react-tailwindcss-datepicker";
+import { formatDate } from "@/utils/util";
 
-const TimelineContents = () => {
+interface ITimelineContentsProps {
+  date: DateValueType;
+}
+
+const TimelineContents = ({ date }: ITimelineContentsProps) => {
   const link = localStorage.getItem("link") || "";
-  const { receipts, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useLoadReceipts(link);
+  let startDate = "";
+  let endDate = "";
+  if (date?.startDate) {
+    startDate = formatDate(new Date(date.startDate));
+  }
+  if (date?.endDate) {
+    endDate = formatDate(new Date(date.endDate));
+  }
+  const { receipts, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useLoadReceipts(
+    link,
+    startDate,
+    endDate
+  );
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 

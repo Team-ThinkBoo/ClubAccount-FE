@@ -33,7 +33,7 @@ export interface ReceiptRequestType {
 }
 
 export interface ReceiptItemsType {
-  id: number;
+  id?: number;
   name: string;
   price: number;
   totalPrice: number;
@@ -48,6 +48,7 @@ export interface ReceiptType {
   amount: number;
   etc: string;
   receiptImageUrl: string;
+  amountMatched: boolean;
 }
 
 export interface LoadReceiptsResponseType {

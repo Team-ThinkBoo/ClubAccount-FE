@@ -8,14 +8,16 @@ import { AddModalType } from "../../types/types";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import { useAuthStore } from "../../store/useAuthStore";
 
-const TimelineHeader = () => {
+interface ITimelineHeaderProps {
+  date: DateValueType;
+  onChangeDate: (newValue: DateValueType) => void;
+}
+
+const TimelineHeader = ({ date, onChangeDate }: ITimelineHeaderProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [openAddMenu, setOpenAddMenu] = useState(false);
   const [modalType, setModalType] = useState<AddModalType>("self");
-  const [date, setDate] = useState<DateValueType>({
-    startDate: null,
-    endDate: null
-  });
+
   const { isLoggedIn } = useAuthStore();
 
   const handleOpenModal = (type: AddModalType) => {
@@ -55,7 +57,7 @@ const TimelineHeader = () => {
               useRange={false}
               primaryColor="amber"
               value={date}
-              onChange={(newValue) => setDate(newValue)}
+              onChange={onChangeDate}
               toggleIcon={() => <ArrowDownIcon />}
             />
           </div>

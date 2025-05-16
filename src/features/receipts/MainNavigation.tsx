@@ -1,8 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import NavList from "../../components/NavList";
 import { AUTH_SEARCH_PARAMS } from "../../constants/constants";
 import LogoIcon from "../../icons/LogoIcon";
 import { useAuthStore } from "../../store/useAuthStore";
+import { Link } from "react-router-dom";
 
 const MainNavigation = () => {
   const { isLoggedIn, link } = useAuthStore();
@@ -16,8 +17,8 @@ const MainNavigation = () => {
         ]
       : [
           { title: "영수증", link: `/receipts/${link}` },
-          { title: "회계록", link: "/accounting" },
-          { title: "Q&A", link: "/qna" }
+          { title: "회계록", link: `/accounting/${link}` },
+          { title: "Q&A", link: `/qna/${link}` }
         ];
 
   return (
