@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/store/useAuthStore";
 import { ChangePWRequestType, ChnageProfileType } from "@/types/mypage";
 import { FetchErrorType } from "@/types/types";
 import { queryClient } from "@/utils/http";
@@ -20,12 +21,14 @@ export function useLoadProfile() {
 }
 
 export function usePatchLick() {
+  const { setLink } = useAuthStore();
   const { mutate, isError, isPending } = useMutation({
     mutationFn: patchLink,
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       const data = await getProfile();
       await navigator.clipboard.writeText(data.link);
+      setLink(data.link);
       toast.success("새로운 링크가 복사되었습니다!");
     },
     onError: (err) => {
@@ -68,7 +71,7 @@ export function usePatchProfile() {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success("프로필 정보가 변경되었습니다!");
-      navigate(-1);
+      navigate("/");
     },
     onError: (err) => {
       toast.error(err.info?.message);

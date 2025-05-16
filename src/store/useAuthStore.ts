@@ -4,6 +4,7 @@ type AuthStore = {
   isLoggedIn: boolean;
   accessToken: string | null;
   link: string | null;
+  setLink: (link: string) => void;
   setAuth: (token: string, uuid: string) => void;
   logout: () => void;
 };
@@ -18,6 +19,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
     localStorage.setItem("link", link);
 
     set({ accessToken: token, isLoggedIn: true, link });
+  },
+  setLink: (link) => {
+    localStorage.setItem("link", link);
+    set({ link });
   },
 
   logout: () => {

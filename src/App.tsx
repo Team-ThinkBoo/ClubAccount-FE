@@ -10,15 +10,32 @@ import MyPage from "./pages/MyPage";
 import { Toaster } from "sonner";
 import EditEmailPage from "./pages/EditEmailPage";
 import EditPasswordPage from "./pages/EditPasswordPage";
+import ReceiptsImgsPage from "./pages/ReceiptsImgsPage";
+import AccountingPage from "./pages/AccountingPage";
+import QnaPage from "./pages/QnaPage";
+import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
+      { index: true, element: <HomePage /> },
+      {
+        path: `/:${PARAMS_IDS.Link}`,
+        element: <ReceiptsPage />
+      },
       {
         path: `/receipts/:${PARAMS_IDS.Link}`,
-        element: <ReceiptsPage />
+        element: <ReceiptsImgsPage />
+      },
+      {
+        path: `/accounting/:${PARAMS_IDS.Link}`,
+        element: <AccountingPage />
+      },
+      {
+        path: `/qna/:${PARAMS_IDS.Link}`,
+        element: <QnaPage />
       }
     ]
   },
