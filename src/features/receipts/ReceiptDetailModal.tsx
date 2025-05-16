@@ -6,6 +6,7 @@ import { useLoadReceiptDetail } from "../../hooks/useReceipts";
 import { useState } from "react";
 import UpdateModalContent from "./UpdateModalContent";
 import { ReceiptType } from "@/types/receipt";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface ReceiptDetailModalProps {
   receipt: ReceiptType;
@@ -18,6 +19,7 @@ const ReceiptDetailModal = ({ receipt, id, open, onCloseModal }: ReceiptDetailMo
   const [mode, setMode] = useState<"view" | "edit">("view");
   const link = getLink();
   const { data, isPending } = useLoadReceiptDetail(link, id);
+  const { isLoggedIn } = useAuthStore();
 
   function handleMode(mode: "view" | "edit") {
     setMode(mode);
@@ -61,12 +63,14 @@ const ReceiptDetailModal = ({ receipt, id, open, onCloseModal }: ReceiptDetailMo
               <ReceiptDetailTable mode="view" receipts={data} />
             </div>
             <footer className="flex flex-col w-full gap-3">
-              <button
-                onClick={() => handleMode("edit")}
-                className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01"
-              >
-                수정하기
-              </button>
+              {isLoggedIn && (
+                <button
+                  onClick={() => handleMode("edit")}
+                  className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01"
+                >
+                  수정하기
+                </button>
+              )}
               <button
                 type="button"
                 onClick={onCloseModal}
