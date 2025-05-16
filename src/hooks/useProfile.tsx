@@ -7,10 +7,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-export function useLoadProfile() {
+export function useLoadProfile({ enabled = true }: { enabled?: boolean }) {
   const { data, isError, isPending } = useQuery({
     queryKey: ["profile"],
-    queryFn: async () => await getProfile()
+    queryFn: async () => await getProfile(),
+    enabled
   });
 
   return {

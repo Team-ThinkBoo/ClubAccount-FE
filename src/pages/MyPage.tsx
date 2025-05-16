@@ -5,16 +5,26 @@ import EditContent from "@/features/mypage/EditContent";
 import { ChangeEvent, useEffect, useState } from "react";
 import EditProfileModal from "@/features/mypage/EditProfileModal";
 import { useLoadProfile, usePatchProfile } from "@/hooks/useProfile";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
+import { toast } from "sonner";
 
 const MyPage = () => {
   const [searchParam, setSearchParam] = useSearchParams();
   const [mode, setMode] = useState<"view" | "edit">(
     (searchParam.get("mode") as "view" | "edit") || "view"
   );
+  const navigate = useNavigate();
   const [onEditProfileImg, setOnEditProfileImg] = useState(false);
+  const { isLoggedIn } = useAuthStore();
+  useEffect(() => {
+    if (!isLoggedIn) {
+      toast.error("로그인을 해주세요!");
+      navigate("/auth");
+    }
+  }, [isLoggedIn, navigate]);
 
-  const { data } = useLoadProfile();
+  const { data } = useLoadProfile({ enabled: isLoggedIn });
   const [department, setDepartment] = useState(data?.department);
   const [profileImg, setProfileImg] = useState<File>();
   const [preview, setPreview] = useState<string>();
