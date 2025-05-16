@@ -5,9 +5,13 @@ import api from "./axiosInstance";
 
 export async function login(loginData: LoginType) {
   try {
-    const response = await axios.post<LoginResponseType>(`/api/v1/auth/sign-in`, loginData, {
-      withCredentials: true
-    });
+    const response = await axios.post<LoginResponseType>(
+      `${import.meta.env.VITE_API_BASE_URL}/v1/auth/sign-in`,
+      loginData,
+      {
+        withCredentials: true
+      }
+    );
 
     return response.data;
   } catch (error: unknown) {
@@ -19,7 +23,7 @@ export async function logoutFn() {
   try {
     const token = localStorage.getItem("accessToken");
     const response = await api.post(
-      `/api/v1/auth/logout`,
+      `${import.meta.env.VITE_API_BASE_URL}/v1/auth/logout`,
       {},
       {
         headers: {
