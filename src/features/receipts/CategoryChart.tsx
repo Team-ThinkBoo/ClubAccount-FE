@@ -1,3 +1,6 @@
+import { useLoadCategoryChart } from "@/hooks/useChart";
+import { ParamsIds } from "@/types/types";
+import { useParams } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#B1C29E", "#F0A04B", "#FCE7C8", "#FDD55D"];
@@ -10,6 +13,14 @@ interface renderLabelProps {
   outerRadius: number;
   percent: number;
 }
+
+const CATEGORY = {
+  groupDiningRatio: "회식비",
+  supplyPurchaseRatio: "물품 구매비",
+  subscriptionRatio: "정기 구독비",
+  venueRentalRatio: "대관비",
+  otherRatio: "기타"
+};
 
 const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: renderLabelProps) => {
   const RADIAN = Math.PI / 180;
@@ -33,18 +44,22 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: re
   );
 };
 
-interface CategoryChartProps {
-  data: { name: string; value: number }[];
-}
+const CategoryChart = () => {
+  const { link } = useParams<ParamsIds>();
+  const { data } = useLoadCategoryChart(link || "");
+  const chartData: { name: (typeof CATEGORY)[keyof typeof CATEGORY]; value: number }[] =
+    Object.entries(data || {}).map(([key, value]) => ({
+      name: CATEGORY[key as keyof typeof CATEGORY],
+      value: Number(Number(value).toFixed(2))
+    }));
 
-const CategoryChart = ({ data }: CategoryChartProps) => {
   return (
     <div className="flex items-center justify-center focus:outline-none w-[250px] h-[250px] md:w-[200px] md:h-[200px]">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             className="focus:outline-none"
-            data={data}
+            data={chartData}
             cx="50%"
             cy="50%"
             innerRadius={45}
@@ -55,7 +70,7 @@ const CategoryChart = ({ data }: CategoryChartProps) => {
             label={renderLabel}
             labelLine={false}
           >
-            {data.map((data, index) => (
+            {chartData.map((data, index) => (
               <Cell key={data.name} fill={COLORS[index]} className="focus:outline-none" />
             ))}
           </Pie>

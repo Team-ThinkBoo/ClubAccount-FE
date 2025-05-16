@@ -5,13 +5,6 @@ import CategoryChart from "./CategoryChart";
 import MonthlyExpenseChart from "./MonthlyExpenseChart";
 import OverviewCard from "./OverviewCard";
 
-const CategoryData = [
-  { name: "카테고리1", value: 400 },
-  { name: "카테고리2", value: 300 },
-  { name: "카테고리3", value: 300 },
-  { name: "카테고리4", value: 200 }
-];
-
 const Overview = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   return (
@@ -22,7 +15,7 @@ const Overview = () => {
             title="카테고리별"
             subTitle="지출 내역"
             Icon={PieChartIcon}
-            ChartElement={<CategoryChart data={CategoryData} />}
+            ChartElement={<CategoryChart />}
           />
           <OverviewCard
             title="월별"
@@ -36,7 +29,7 @@ const Overview = () => {
       {!isMobile && (
         <div className="min-w-[568px] w-11/12 max-w-[640px] lg:min-w-[640px] lg:max-w-[740px] md:flex h-[284px] justify-between">
           <div className="flex flex-col items-center justify-end gap-11">
-            <CategoryChart data={CategoryData} />
+            <CategoryChart />
             <span className="body-bold-14 text-gray-01">카테고리별 지출 내역</span>
           </div>
           <div className="flex flex-col items-center justify-end gap-6 lg:min-w-[346px] lg:max-w-[414px] lg:w-full">

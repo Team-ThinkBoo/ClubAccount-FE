@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createFetchError } from "./axios";
-import { LoadExpenseChartResponse } from "@/types/chart";
+import { LoadCategoryChartResponse, LoadExpenseChartResponse } from "@/types/chart";
 
 interface ILoadExpenseChartProps {
   link: string;
@@ -15,5 +15,20 @@ export async function loadExpenseChart({ link, year }: ILoadExpenseChartProps) {
     return response.data;
   } catch (error: unknown) {
     throw createFetchError(error, "지출 차트 로딩 과정에서 오류가 발생하였습니다!");
+  }
+}
+
+interface ILoadCategoryChartProps {
+  link: string;
+}
+
+export async function loadCategoryChart({ link }: ILoadCategoryChartProps) {
+  try {
+    const response = await axios.get<LoadCategoryChartResponse>(
+      `/api/v1/${link}/receipts/category`
+    );
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "카테고리 차트 로딩 과정에서 오류가 발생하였습니다!");
   }
 }
