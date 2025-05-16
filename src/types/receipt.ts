@@ -33,7 +33,7 @@ export interface ReceiptRequestType {
 }
 
 export interface ReceiptItemsType {
-  id: number;
+  id?: number;
   name: string;
   price: number;
   totalPrice: number;
