@@ -1,10 +1,10 @@
 import api from "./axiosInstance";
 import { createFetchError } from "./axios";
 import {
-  LoadReceiptDetailResponseType,
   LoadReceiptsResponseType,
   ParseReceiptRequestType,
   ParseReceiptResponseType,
+  ReceiptItemsType,
   ReceiptRequestType,
   ReceiptType
 } from "../types/receipt";
@@ -78,9 +78,7 @@ export async function loadReceipts({ page, link, size, sort }: loadReceiptsProps
 
 export async function loadReceiptDetail(link: LoginResponseType["link"], id: ReceiptType["id"]) {
   try {
-    const response = await axios.get<LoadReceiptDetailResponseType>(
-      `/api/v1/${link}/receipts/${id}`
-    );
+    const response = await axios.get<ReceiptItemsType[]>(`/api/v1/${link}/receipts/${id}`);
 
     return response.data;
   } catch (error: unknown) {

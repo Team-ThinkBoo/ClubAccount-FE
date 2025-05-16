@@ -18,7 +18,12 @@ const TimelineContentCard = ({ receipt }: TimelineContentCardProps) => {
   return (
     <>
       {open && (
-        <ReceiptDetailModal id={receipt.id} open={open} onCloseModal={() => handleOpen(false)} />
+        <ReceiptDetailModal
+          receipt={receipt}
+          id={receipt.id}
+          open={open}
+          onCloseModal={() => handleOpen(false)}
+        />
       )}
       <li
         onClick={() => handleOpen(true)}

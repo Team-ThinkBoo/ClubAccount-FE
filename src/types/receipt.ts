@@ -33,6 +33,7 @@ export interface ReceiptRequestType {
 }
 
 export interface ReceiptItemsType {
+  id: number;
   name: string;
   price: number;
   totalPrice: number;
@@ -62,7 +63,5 @@ export interface LoadReceiptsResponseType {
 }
 
 export interface LoadReceiptDetailResponseType extends ReceiptType {
-  receiptItems: ({
-    id: number;
-  } & ReceiptItemsType)[];
+  receiptItems: ReceiptItemsType[];
 }
