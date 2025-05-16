@@ -48,6 +48,7 @@ export interface ReceiptType {
   amount: number;
   etc: string;
   receiptImageUrl: string;
+  amountMatched: boolean;
 }
 
 export interface LoadReceiptsResponseType {

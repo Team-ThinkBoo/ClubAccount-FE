@@ -5,11 +5,16 @@ import { LoginResponseType } from "../types/auth";
 import { FetchErrorType } from "../types/types";
 import { queryClient } from "../utils/http";
 
-export function useLoadReceipts(link: LoginResponseType["link"]) {
+export function useLoadReceipts(
+  link: LoginResponseType["link"],
+  startDate?: string,
+  endDate?: string
+) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useInfiniteQuery<LoadReceiptsResponseType>({
-      queryKey: ["receipts", link],
-      queryFn: ({ pageParam = 1 }) => loadReceipts({ page: pageParam as number, link }),
+      queryKey: ["receipts", link, startDate, endDate],
+      queryFn: ({ pageParam = 1 }) =>
+        loadReceipts({ page: pageParam as number, link, startDate, endDate }),
       getNextPageParam: (lastPage) => (lastPage.isLast ? undefined : lastPage.pageNumber + 1),
       initialPageParam: 1
     });

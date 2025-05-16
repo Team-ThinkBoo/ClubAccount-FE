@@ -57,15 +57,30 @@ interface loadReceiptsProps {
   link: string;
   size?: number;
   sort?: "createAt,asc" | "createAt,desc";
+  startDate?: string;
+  endDate?: string;
 }
 
-export async function loadReceipts({ page, link, size, sort }: loadReceiptsProps) {
+export async function loadReceipts({
+  page,
+  link,
+  size,
+  sort,
+  startDate,
+  endDate
+}: loadReceiptsProps) {
   let api = `/api/v1/${link}/receipts?page=${page}`;
   if (size) {
     api += `&size=${size}`;
   }
   if (sort) {
     api += `&sort=${sort}`;
+  }
+  if (startDate) {
+    api += `&startDate=${startDate}`;
+  }
+  if (endDate) {
+    api += `&endDate=${endDate}`;
   }
 
   try {
