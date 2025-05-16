@@ -2,27 +2,27 @@ import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import Selector from "../../components/Selector";
 import Input from "../../components/Input";
 import { CATEGORY, categoryKeys } from "../../constants/constants";
-import {
-  LoadReceiptDetailResponseType,
-  ReceiptItemsType,
-  ReceiptRequestType
-} from "../../types/receipt";
+import { ReceiptItemsType, ReceiptRequestType, ReceiptType } from "../../types/receipt";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { formatDate, getLink } from "../../utils/util";
 import ReceiptDetailsList from "./ReceiptDetailsList";
 import { useUpdateReceipt } from "../../hooks/useReceipts";
 
 interface UpdateModalContentProps {
-  data: LoadReceiptDetailResponseType;
+  receipt: ReceiptType;
+  receiptItems: ReceiptItemsType[];
   onCloseModal: () => void;
 }
 
-const UpdateModalContent = ({ data, onCloseModal }: UpdateModalContentProps) => {
+const UpdateModalContent = ({ receipt, receiptItems, onCloseModal }: UpdateModalContentProps) => {
   const [date, setDate] = useState<DateValueType>({
-    startDate: new Date(data.date),
-    endDate: new Date(data.date)
+    startDate: new Date(receipt.date),
+    endDate: new Date(receipt.date)
   });
-  const [value, setValue] = useState<ReceiptRequestType["request"]>(data);
+  const [value, setValue] = useState<ReceiptRequestType["request"]>({
+    ...receipt,
+    receiptItems: receiptItems
+  });
   const [error, setError] = useState<string | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const link = getLink();
@@ -55,7 +55,7 @@ const UpdateModalContent = ({ data, onCloseModal }: UpdateModalContentProps) => 
       return;
     }
 
-    updateMutate({ id: data.id, datas: value });
+    updateMutate({ id: receipt.id, datas: value });
   };
 
   const handleUpdateItems = (items: ReceiptItemsType[]) => {
