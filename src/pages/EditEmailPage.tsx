@@ -1,6 +1,7 @@
 import LabelInput from "@/features/mypage/LabelInput";
 import { useLoadProfile } from "@/hooks/useProfile";
 import { useValidator } from "@/hooks/useValidator";
+import { useAuthStore } from "@/store/useAuthStore";
 import {
   LoginResponseType,
   LoginType,
@@ -41,7 +42,9 @@ const EditEmailPage = () => {
   const [newEmail, setNewEmail] = useState("");
   const [verifyCode, setVerifyCode] = useState("");
 
-  const { data } = useLoadProfile();
+  const { isLoggedIn } = useAuthStore();
+
+  const { data } = useLoadProfile({ enabled: isLoggedIn });
 
   const navigate = useNavigate();
 
