@@ -28,7 +28,11 @@ instance.interceptors.response.use(
 
       try {
         // 리프레시 요청
-        const res = await axios.post("/api/v1/auth/token", {}, { withCredentials: true });
+        const res = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/v1/auth/token`,
+          {},
+          { withCredentials: true }
+        );
         const newAccessToken = res.data.accessToken;
         localStorage.setItem("accessToken", newAccessToken);
 

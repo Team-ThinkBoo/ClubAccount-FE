@@ -10,7 +10,7 @@ interface ILoadExpenseChartProps {
 export async function loadExpenseChart({ link, year }: ILoadExpenseChartProps) {
   try {
     const response = await axios.get<LoadExpenseChartResponse>(
-      `/api/v1/${link}/receipts/expense?year=${year}`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/${link}/receipts/expense?year=${year}`
     );
     return response.data;
   } catch (error: unknown) {
@@ -25,7 +25,7 @@ interface ILoadCategoryChartProps {
 export async function loadCategoryChart({ link }: ILoadCategoryChartProps) {
   try {
     const response = await axios.get<LoadCategoryChartResponse>(
-      `/api/v1/${link}/receipts/category`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/${link}/receipts/category`
     );
     return response.data;
   } catch (error: unknown) {

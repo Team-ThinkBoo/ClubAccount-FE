@@ -40,11 +40,15 @@ export async function createReceipt(datas: ReceiptRequestType) {
   }
 
   try {
-    const response = await api.post("/api/v1/receipts/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data"
+    const response = await api.post(
+      `${import.meta.env.VITE_API_BASE_URL}/v1/receipts/create`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
       }
-    });
+    );
 
     return response.data;
   } catch (error: unknown) {
@@ -69,7 +73,7 @@ export async function loadReceipts({
   startDate,
   endDate
 }: loadReceiptsProps) {
-  let api = `/api/v1/${link}/receipts?page=${page}`;
+  let api = `${import.meta.env.VITE_API_BASE_URL}/v1/${link}/receipts?page=${page}`;
   if (size) {
     api += `&size=${size}`;
   }
@@ -93,7 +97,9 @@ export async function loadReceipts({
 
 export async function loadReceiptDetail(link: LoginResponseType["link"], id: ReceiptType["id"]) {
   try {
-    const response = await axios.get<ReceiptItemsType[]>(`/api/v1/${link}/receipts/${id}`);
+    const response = await axios.get<ReceiptItemsType[]>(
+      `${import.meta.env.VITE_API_BASE_URL}/v1/${link}/receipts/${id}`
+    );
 
     return response.data;
   } catch (error: unknown) {
@@ -103,11 +109,15 @@ export async function loadReceiptDetail(link: LoginResponseType["link"], id: Rec
 
 export async function updateReceipt({ id, datas }: UpdateReceiptProps) {
   try {
-    const response = await api.put(`/api/v1/receipts/${id}`, datas, {
-      headers: {
-        "Content-Type": "application/json"
+    const response = await api.put(
+      `${import.meta.env.VITE_API_BASE_URL}/v1/receipts/${id}`,
+      datas,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
-    });
+    );
 
     return response.data;
   } catch (error: unknown) {

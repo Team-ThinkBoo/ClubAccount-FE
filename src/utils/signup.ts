@@ -11,7 +11,9 @@ import { login } from "./login";
 import { createFetchError } from "./axios";
 
 export async function checkDuplicateId(email: UserType["email"]) {
-  const response = await fetch(`/api/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`);
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`
+  );
 
   if (!response.ok) {
     const error: FetchErrorType = new Error("이메일 중복 확인 과정에서 오류가 발생하였습니다!");
@@ -33,7 +35,9 @@ export async function checkDuplicateId(email: UserType["email"]) {
 }
 
 export async function checkValidId(email: UserType["email"]) {
-  const response = await fetch(`/api/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`);
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/users/sign-up/check-duplicate-auth-id?auth-id=${email}`
+  );
 
   if (!response.ok) {
     const error: FetchErrorType = new Error("이메일 중복 확인 과정에서 오류가 발생하였습니다!");
@@ -56,7 +60,9 @@ export async function checkValidId(email: UserType["email"]) {
 
 export async function sendVerificationEmail(email: UserType["email"]) {
   try {
-    const response = await axios.post(`/api/v1/email/send`, { email });
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/v1/email/send`, {
+      email
+    });
 
     return response.data;
   } catch (error: unknown) {
@@ -66,10 +72,13 @@ export async function sendVerificationEmail(email: UserType["email"]) {
 
 export async function checkVerificationEmail({ code, email }: VerifyCodeType) {
   try {
-    const response = await axios.post<VerifyResponseType>(`/api/v1/email/verify`, {
-      email,
-      code
-    });
+    const response = await axios.post<VerifyResponseType>(
+      `${import.meta.env.VITE_API_BASE_URL}/v1/email/verify`,
+      {
+        email,
+        code
+      }
+    );
 
     return response.data;
   } catch (error: unknown) {
@@ -78,7 +87,7 @@ export async function checkVerificationEmail({ code, email }: VerifyCodeType) {
 }
 
 export async function signup(signupData: SignupType) {
-  const response = await fetch(`/api/v1/users/sign-up`, {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/users/sign-up`, {
     method: "POST",
     body: JSON.stringify(signupData),
     headers: {
