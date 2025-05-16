@@ -17,7 +17,7 @@ const AuthActionInput = ({ buttonText, buttonProps, inputProps }: AuthActionInpu
         </div>
       )}
       <button
-        className="px-4 py-3 rounded-lg min-w-14 max-w-[74px] shrink-0 text-primary-var1 bg-primary-var2 caption-med-12 whitespace-nowrap"
+        className="px-4 py-3 rounded-lg min-w-14 max-w-[74px] shrink-0 text-primary-var1 bg-[#FFFAE1] caption-med-12 whitespace-nowrap"
         {...buttonProps}
       >
         {buttonText}

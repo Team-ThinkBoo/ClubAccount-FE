@@ -11,7 +11,7 @@ interface ViewContentProps {
 const ViewContent = ({ mode, info }: ViewContentProps) => {
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}receipts/${info.link}`);
+      await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}${info.link}`);
       toast.success("복사 완료!");
     } catch {
       toast.error("복사 실패");
@@ -27,7 +27,7 @@ const ViewContent = ({ mode, info }: ViewContentProps) => {
         className="overflow-hidden underline cursor-pointer body-med-14 whitespace-nowrap text-ellipsis"
         onClick={handleCopy}
         mode={mode}
-        value={`${import.meta.env.VITE_BASE_URL}receipts/${info.link}`}
+        value={`${import.meta.env.VITE_BASE_URL}${info.link}`}
       />
     </>
   );
