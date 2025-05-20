@@ -15,11 +15,11 @@ interface renderLabelProps {
 }
 
 const CATEGORY = {
-  groupDiningRatio: "회식비",
-  supplyPurchaseRatio: "물품 구매비",
-  subscriptionRatio: "정기 구독비",
-  venueRentalRatio: "대관비",
-  otherRatio: "기타"
+  groupDiningExpense: "회식비",
+  supplyPurchaseExpense: "물품 구매비",
+  subscriptionExpense: "정기 구독비",
+  venueRentalExpense: "대관비",
+  otherExpense: "기타"
 };
 
 const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: renderLabelProps) => {
