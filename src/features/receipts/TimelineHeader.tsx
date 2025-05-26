@@ -72,7 +72,7 @@ const TimelineHeader = ({ date, onChangeDate }: ITimelineHeaderProps) => {
               </div>
 
               {openAddMenu && (
-                <ul className="absolute right-0 flex flex-col justify-center gap-2 px-2 py-2 shadow-md rounded-xl w-max bg-warm-gray-03">
+                <ul className="absolute right-0 z-30 flex flex-col justify-center gap-2 px-2 py-2 shadow-md rounded-xl w-max bg-warm-gray-03">
                   <li
                     className="flex items-center gap-2 p-2 cursor-pointer rounded-xl hover:bg-warm-gray-01 focus:bg-warm-gray-01 active:bg-warm-gray-01"
                     onClick={() => {

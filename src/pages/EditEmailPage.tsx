@@ -89,7 +89,7 @@ const EditEmailPage = () => {
       setActiveEmail(false);
     },
     onError: (err) => {
-      console.error("❌ 이메일 중복 확인 실패:", err);
+      console.error("이메일 중복 확인 실패:", err);
       toast.error(`📧 ${err.info?.message}`);
     }
   });
@@ -98,8 +98,8 @@ const EditEmailPage = () => {
     mutationFn: sendVerificationEmail,
     onSuccess: () => {},
     onError: (err) => {
-      console.error("❌ 이메일 인증 실패:", err);
-      alert("❌ 이메일 인증 요청에 실패했습니다.");
+      console.error("이메일 인증 실패:", err);
+      alert("이메일 인증 요청에 실패했습니다.");
     }
   });
 
@@ -117,21 +117,21 @@ const EditEmailPage = () => {
       }
     },
     onError: (err) => {
-      console.error("❌ 이메일 인증 실패:", err);
-      toast.error("❌ 이메일 인증에 실패했습니다.");
+      console.error("이메일 인증 실패:", err);
+      toast.error("이메일 인증에 실패했습니다.");
     }
   });
 
   const { mutate: patchEmailMutation } = useMutation({
     mutationFn: patchEmail,
     onSuccess: () => {
-      toast.success("✅ 이메일이 변경되었습니다!");
+      toast.success("이메일이 변경되었습니다!");
       queryClient.invalidateQueries({ queryKey: ["profile"], refetchType: "none" });
       navigate(-1);
     },
     onError: (err) => {
-      console.error("❌ 이메일 변경 실패:", err);
-      toast.error("❌ 이메일 변경에 실패했습니다." + err);
+      console.error("이메일 변경 실패:", err);
+      toast.error("이메일 변경에 실패했습니다." + err);
     }
   });
 

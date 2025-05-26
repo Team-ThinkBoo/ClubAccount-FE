@@ -40,15 +40,11 @@ export async function createReceipt(datas: ReceiptRequestType) {
   }
 
   try {
-    const response = await api.post(
-      `${import.meta.env.VITE_API_BASE_URL}/v1/receipts/create`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
+    const response = await api.post(`${import.meta.env.VITE_API_BASE_URL}/v1/receipts`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
       }
-    );
+    });
 
     return response.data;
   } catch (error: unknown) {

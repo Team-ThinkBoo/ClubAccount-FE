@@ -3,6 +3,7 @@ import { CATEGORY } from "../../constants/constants";
 import { ReceiptType } from "../../types/receipt";
 import { formatAmount } from "../../utils/util";
 import ReceiptDetailModal from "./ReceiptDetailModal";
+import { AlertCircleIcon } from "lucide-react";
 
 interface TimelineContentCardProps {
   receipt: ReceiptType;
@@ -27,8 +28,13 @@ const TimelineContentCard = ({ receipt }: TimelineContentCardProps) => {
       )}
       <li
         onClick={() => handleOpen(true)}
-        className="flex h-[162px] min-w-[312px] w-full max-w-[536px] gap-4 p-4 border rounded-2xl border-gray-05 mid:min-w-[320px] mid:max-w-[487px] mid:w-full lg-mid:w-[320px] cursor-pointer"
+        className="relative flex h-[162px] min-w-[312px] w-full max-w-[536px] gap-4 p-4 border rounded-2xl border-gray-05 mid:min-w-[320px] mid:max-w-[487px] mid:w-full lg-mid:w-[320px] cursor-pointer"
       >
+        {!receipt.amountMatched && (
+          <div className="absolute flex items-center justify-center w-5 h-5 overflow-hidden rounded-full -top-1 -right-1">
+            <AlertCircleIcon className="w-5 h-5 text-white bg-red-500" />
+          </div>
+        )}
         <div className="flex flex-col gap-4 justify-between w-[calc(75%-1rem)]">
           <div>
             <p className="body-bold-14 text-gray-01">{receipt.date.toString()}</p>

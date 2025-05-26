@@ -17,6 +17,7 @@ import { formatDate } from "../../utils/util";
 import ReceiptDetailsList from "./ReceiptDetailsList";
 import { queryClient } from "../../utils/http";
 import Capture from "@/components/Capture";
+import LoadingSpinner from "@/components/LoadingSpinner";
 interface AddModalProps {
   type: AddModalType;
   open: boolean;
@@ -107,6 +108,14 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    const MAX_SIZE_MB = 10;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+    if (file.size > MAX_SIZE_BYTES) {
+      alert(`파일 크기는 ${MAX_SIZE_MB}MB 이하만 업로드할 수 있습니다.`);
+      return;
+    }
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -259,6 +268,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
               alt="preview"
               className="object-cover w-full border border-gray-300 rounded-lg"
             />
+            <LoadingSpinner />
             <p>영수증 정보를 인식중입니다.</p>
           </>
         )}

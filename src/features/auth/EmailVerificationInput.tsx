@@ -43,12 +43,12 @@ const EmailVerificationInput = ({
     mutationFn: mode === "signup" ? checkDuplicateId : checkValidId,
     onSuccess: (data) => {
       verifyEmailMutation(data);
-      alert("📧 이메일 인증 코드가 전송되었습니다!");
-      setVerificationSent(true); // ✅ 인증 코드 입력 필드 활성화
+      alert("이메일 인증 코드가 전송되었습니다!");
+      setVerificationSent(true);
     },
     onError: (err) => {
-      console.error("❌ 이메일 중복 확인 실패:", err);
-      alert(`📧 ${err.info?.message}`);
+      console.error("이메일 중복 확인 실패:", err);
+      alert(`${err.info?.message}`);
     }
   });
 
@@ -56,8 +56,8 @@ const EmailVerificationInput = ({
     mutationFn: sendVerificationEmail,
     onSuccess: () => {},
     onError: (err) => {
-      console.error("❌ 이메일 인증 실패:", err);
-      alert("❌ 이메일 인증 요청에 실패했습니다.");
+      console.error("이메일 인증 실패:", err);
+      alert("이메일 인증 요청에 실패했습니다.");
     }
   });
 
@@ -69,7 +69,7 @@ const EmailVerificationInput = ({
     mutationFn: checkVerificationEmail,
     onSuccess: (data) => {
       if (data.success) {
-        alert("✅ 인증이 완료되었습니다!");
+        alert("인증이 완료되었습니다!");
         onSuccess(true);
         setEmailInputDisabled(true);
       } else {
@@ -78,8 +78,8 @@ const EmailVerificationInput = ({
       }
     },
     onError: (err) => {
-      console.error("❌ 이메일 인증 실패:", err);
-      alert("❌ 이메일 인증에 실패했습니다.");
+      console.error("이메일 인증 실패:", err);
+      alert("이메일 인증에 실패했습니다.");
     }
   });
 

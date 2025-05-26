@@ -6,6 +6,7 @@ import { ParamsIds } from "../types/types";
 import { setLink } from "../utils/util";
 import { DateValueType } from "react-tailwindcss-datepicker";
 import { useState } from "react";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 const ReceiptsPage = () => {
   const [date, setDate] = useState<DateValueType>({
@@ -25,6 +26,7 @@ const ReceiptsPage = () => {
         <TimelineHeader date={date} onChangeDate={handleDateChange} />
         <TimelineContents date={date} />
       </div>
+      <ScrollToTopButton />
     </div>
   );
 };
