@@ -17,6 +17,12 @@ export interface SignupType {
   organization?: UserType["organization"];
 }
 
+export interface resetPasswordType {
+  authId: UserType["email"];
+  newPassword: UserType["password"];
+  confirmPassword?: UserType["password"];
+}
+
 export type SignupErrorType = {
   _errors?: string[];
 } & Partial<Record<keyof SignupType, { _errors: string[] }>>;

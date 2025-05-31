@@ -10,6 +10,7 @@ import {
   passwordSchema
 } from "../../utils/schemas";
 import PasswordWithConfirm from "./PasswordWithConfirm";
+import { useResetPassword } from "@/hooks/useProfile";
 
 const schemaMap = {
   authId: authIdSchema,
@@ -27,6 +28,7 @@ const ChangePW = () => {
 
   const { errors, setErrors, validateAndRun } = useValidator<SignupErrorType>();
 
+  const { mutate } = useResetPassword();
   function handleSuccessVerification(success: boolean) {
     setSuccessVerification(success);
   }
@@ -49,7 +51,11 @@ const ChangePW = () => {
 
   function handleSubmit() {
     validateAndRun(changePwSchema, signupData, (data) => {
-      console.log(data);
+      mutate({
+        authId: data.authId,
+        newPassword: data.password,
+        confirmPassword: data.passwordCheck
+      });
     });
   }
   return (

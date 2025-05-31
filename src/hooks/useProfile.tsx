@@ -1,7 +1,9 @@
 import { useAuthStore } from "@/store/useAuthStore";
+import { resetPasswordType } from "@/types/auth";
 import { ChangePWRequestType, ChnageProfileType } from "@/types/mypage";
 import { FetchErrorType } from "@/types/types";
 import { queryClient } from "@/utils/http";
+import { resetPassword } from "@/utils/login";
 import { deleteProfile, getProfile, patchLink, patchPassword, patchProfile } from "@/utils/mypage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -93,6 +95,26 @@ export function useDeleteProfile() {
     onSuccess: async () => {
       toast.success("회원 탈퇴 성공");
       navigate("/");
+    },
+    onError: (err) => {
+      toast.error(err.info?.message);
+    }
+  });
+
+  return {
+    mutate,
+    isError,
+    isPending
+  };
+}
+
+export function useResetPassword() {
+  const navigate = useNavigate();
+  const { mutate, isError, isPending } = useMutation<unknown, FetchErrorType, resetPasswordType>({
+    mutationFn: resetPassword,
+    onSuccess: async () => {
+      toast.success("비밀번호가 변경되었습니다!");
+      navigate(-1);
     },
     onError: (err) => {
       toast.error(err.info?.message);
