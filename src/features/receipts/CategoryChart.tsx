@@ -3,83 +3,92 @@ import { ParamsIds } from "@/types/types";
 import { useParams } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#B1C29E", "#F0A04B", "#FCE7C8", "#FDD55D"];
+const COLORS = ["#FCE7C8", "#FDD55D", "#F0A04B", "#B1C29E", "#D3D3D3"]; // 순서에 맞게 조정
 
-interface renderLabelProps {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-  percent: number;
-}
+const CATEGORY_ORDER = ["물품 구매비", "정기 구독비", "회식비", "대관비", "기타"];
 
 const CATEGORY = {
-  groupDiningExpense: "회식비",
   supplyPurchaseExpense: "물품 구매비",
   subscriptionExpense: "정기 구독비",
+  groupDiningExpense: "회식비",
   venueRentalExpense: "대관비",
   otherExpense: "기타"
-};
-
-const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: renderLabelProps) => {
-  const RADIAN = Math.PI / 180;
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="#323232"
-      textAnchor="middle"
-      dominantBaseline="central"
-      fontSize={14}
-      fontWeight={500}
-      pointerEvents="none"
-    >
-      {(percent * 100).toFixed(1)}%
-    </text>
-  );
 };
 
 const CategoryChart = () => {
   const { link } = useParams<ParamsIds>();
   const { data } = useLoadCategoryChart(link || "");
-  const chartData: { name: (typeof CATEGORY)[keyof typeof CATEGORY]; value: number }[] =
-    Object.entries(data || {}).map(([key, value]) => ({
+
+  const chartData = Object.entries(data || {})
+    .map(([key, value]) => ({
       name: CATEGORY[key as keyof typeof CATEGORY],
       value: Number(Number(value).toFixed(2))
-    }));
+    }))
+    .sort((a, b) => CATEGORY_ORDER.indexOf(a.name) - CATEGORY_ORDER.indexOf(b.name));
+
+  const total = chartData.reduce((acc, cur) => acc + cur.value, 0);
 
   return (
-    <div className="flex items-center justify-center focus:outline-none w-[250px] h-[250px] md:w-[200px] md:h-[200px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            className="focus:outline-none"
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            innerRadius={45}
-            outerRadius={100}
-            fill="#8884d8"
-            paddingAngle={2}
-            dataKey="value"
-            label={renderLabel}
-            labelLine={false}
-          >
-            {chartData.map((data, index) => (
-              <Cell key={data.name} fill={COLORS[index]} className="focus:outline-none" />
-            ))}
-          </Pie>
-          <Tooltip
-            formatter={(value: number, name: string) => [`${value}원`, name]}
-            wrapperStyle={{ fontSize: "14px" }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
+    <div className="flex flex-col items-center justify-center gap-2">
+      <div className="w-[200px] h-[200px] md:w-[200px] md:h-[200px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius={45}
+              outerRadius={100}
+              paddingAngle={2}
+              dataKey="value"
+              labelLine={false}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip
+              formatter={(value: number, name: string) => [`${value}원`, name]}
+              wrapperStyle={{ fontSize: "14px" }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="flex flex-col items-center gap-2 text-xs text-[#333]">
+        <div className="flex gap-x-6">
+          {chartData.slice(0, 2).map((entry, index) => {
+            const percent = total > 0 ? ((entry.value / total) * 100).toFixed(1) : "0.00";
+            return (
+              <div key={entry.name} className="flex items-center gap-1">
+                <span
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                ></span>
+                <span>{entry.name}</span>
+                <span>{percent}%</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex gap-x-4">
+          {chartData.slice(2).map((entry, index) => {
+            const percent = total > 0 ? ((entry.value / total) * 100).toFixed(1) : "0.00";
+            const colorIndex = index + 2;
+            return (
+              <div key={entry.name} className="flex items-center gap-1">
+                <span
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: COLORS[colorIndex % COLORS.length] }}
+                ></span>
+                <span>{entry.name}</span>
+                <span>{percent}%</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };

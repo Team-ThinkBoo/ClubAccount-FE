@@ -28,7 +28,7 @@ const Overview = () => {
 
       {!isMobile && (
         <div className="min-w-[568px] w-11/12 max-w-[640px] lg:min-w-[640px] lg:max-w-[740px] md:flex h-[284px] justify-between">
-          <div className="flex flex-col items-center justify-end gap-11">
+          <div className="flex flex-col items-center justify-end gap-4">
             <CategoryChart />
             <span className="body-bold-14 text-gray-01">카테고리별 지출 내역</span>
           </div>

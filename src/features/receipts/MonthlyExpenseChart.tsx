@@ -1,4 +1,6 @@
 import { useLoadExpenseChart } from "@/hooks/useChart";
+import ArrowLeftIcon from "@/icons/ArrowLeftIcon";
+import ArrowRightIcon from "@/icons/ArrowRightIcon";
 import { ParamsIds } from "@/types/types";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -21,14 +23,14 @@ const MonthlyExpenseChart = () => {
 
   return (
     <div className="relative w-[328px] h-[300px] md:w-[346px] md:h-[240px] lg:min-w-[346px] lg:max-w-[414px] lg:w-full">
-      <div className="absolute z-10 left-1/2 right-1/2">
+      <div className="absolute z-10 transform -translate-x-1/2 -top-2 left-1/2">
         <div className="flex gap-5 ">
           <button className="cursor-pointer" onClick={() => setYear((pre) => pre - 1)}>
-            {"<"}
+            <ArrowLeftIcon className="w-4 h-4" />
           </button>
-          <span>{year}</span>
+          <span className="body-med-16">{year}</span>
           <button className="cursor-pointer" onClick={() => setYear((pre) => pre + 1)}>
-            {">"}
+            <ArrowRightIcon className="w-4 h-4" />
           </button>
         </div>
       </div>
