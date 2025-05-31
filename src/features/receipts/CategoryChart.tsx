@@ -27,32 +27,39 @@ const CategoryChart = () => {
     .sort((a, b) => CATEGORY_ORDER.indexOf(a.name) - CATEGORY_ORDER.indexOf(b.name));
 
   const total = chartData.reduce((acc, cur) => acc + cur.value, 0);
-
+  const isNoData = chartData.every((item) => item.value === 0);
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       <div className="w-[200px] h-[200px] md:w-[200px] md:h-[200px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={45}
-              outerRadius={100}
-              paddingAngle={2}
-              dataKey="value"
-              labelLine={false}
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value: number, name: string) => [`${value}원`, name]}
-              wrapperStyle={{ fontSize: "14px" }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        {isNoData && (
+          <div className="w-[200px] h-[200px] flex items-center justify-center text-sm text-gray-400">
+            집계된 데이터가 없습니다.
+          </div>
+        )}
+        {!isNoData && (
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                innerRadius={45}
+                outerRadius={100}
+                paddingAngle={2}
+                dataKey="value"
+                labelLine={false}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number, name: string) => [`${value}원`, name]}
+                wrapperStyle={{ fontSize: "14px" }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        )}
       </div>
 
       <div className="flex flex-col items-center gap-2 text-xs text-[#333]">

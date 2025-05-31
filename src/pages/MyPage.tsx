@@ -1,10 +1,9 @@
-import Button from "@/components/Button";
 import defaultProfile from "/defaultProfile.png";
 import ViewContent from "@/features/mypage/ViewContent";
 import EditContent from "@/features/mypage/EditContent";
 import { ChangeEvent, useEffect, useState } from "react";
 import EditProfileModal from "@/features/mypage/EditProfileModal";
-import { useLoadProfile, usePatchProfile } from "@/hooks/useProfile";
+import { useDeleteProfile, useLoadProfile, usePatchProfile } from "@/hooks/useProfile";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { toast } from "sonner";
@@ -30,6 +29,7 @@ const MyPage = () => {
   const [preview, setPreview] = useState<string>();
 
   const { mutate: editProfileMutation } = usePatchProfile();
+  const { mutate: deleteProfileMutation } = useDeleteProfile();
 
   function handleMode(mode: "view" | "edit") {
     setMode(mode);
@@ -110,7 +110,22 @@ const MyPage = () => {
           )}
         </div>
         <div className="flex justify-center w-full">
-          {mode === "view" && <Button onClick={() => handleMode("edit")}>회원정보 수정</Button>}
+          {mode === "view" && (
+            <div className="flex justify-center gap-3">
+              <button
+                className="w-[130px] md:w-[150px] text-gray-03 bg-gray-06 h-12 rounded-[8px] body-bold-16"
+                onClick={() => deleteProfileMutation()}
+              >
+                회원 삭제
+              </button>
+              <button
+                className="w-[130px] md:w-[150px] text-gray-01 bg-primary h-12 rounded-[8px] body-bold-16"
+                onClick={() => handleMode("edit")}
+              >
+                회원정보 수정
+              </button>
+            </div>
+          )}
           {mode === "edit" && (
             <div className="flex justify-center gap-3">
               <button

@@ -6,7 +6,7 @@ import { ReceiptItemsType, ReceiptRequestType, ReceiptType } from "../../types/r
 import { ChangeEvent, FormEvent, useState } from "react";
 import { formatDate, getLink } from "../../utils/util";
 import ReceiptDetailsList from "./ReceiptDetailsList";
-import { useUpdateReceipt } from "../../hooks/useReceipts";
+import { useDeleteReceipt, useUpdateReceipt } from "../../hooks/useReceipts";
 
 interface UpdateModalContentProps {
   receipt: ReceiptType;
@@ -28,6 +28,7 @@ const UpdateModalContent = ({ receipt, receiptItems, onCloseModal }: UpdateModal
   const link = getLink();
 
   const { mutate: updateMutate } = useUpdateReceipt(link, onCloseModal);
+  const { mutate: deleteMutate } = useDeleteReceipt();
 
   const handleChangeValue = (
     key: keyof ReceiptRequestType["request"],
@@ -65,7 +66,7 @@ const UpdateModalContent = ({ receipt, receiptItems, onCloseModal }: UpdateModal
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[312px] md:w-[368px] rounded-2xl bg-white flex flex-col justify-center items-center py-8 px-5 gap-6 h-[582px]"
+      className="w-[312px] md:w-[368px] rounded-2xl bg-white flex flex-col justify-between items-center px-5 gap-6 h-[582px]"
     >
       {!showDetails && (
         <>
@@ -131,19 +132,29 @@ const UpdateModalContent = ({ receipt, receiptItems, onCloseModal }: UpdateModal
               </button>
               {error && <p className="text-red-400 caption-med-12">{error}</p>}
             </div>
-            <footer className="flex flex-col w-full gap-3">
-              <button className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01">
+          </div>
+          <footer className="flex flex-col w-full gap-10">
+            <div className="flex gap-3">
+              <button className="w-full px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01">
                 저장하기
               </button>
+
               <button
                 type="button"
-                onClick={onCloseModal}
-                className="px-4 py-3 text-center rounded-lg bg-gray-05 body-bold-16 text-gray-03"
+                onClick={() => deleteMutate({ id: receipt.id })}
+                className="w-full px-4 py-3 text-center rounded-lg bg-gray-05 body-bold-16 text-gray-03"
               >
-                취소
+                삭제하기
               </button>
-            </footer>
-          </div>
+            </div>
+            <button
+              type="button"
+              onClick={onCloseModal}
+              className="px-4 py-3 text-center rounded-lg bg-gray-06 body-bold-16 text-gray-03"
+            >
+              취소
+            </button>
+          </footer>
         </>
       )}
       {showDetails && (

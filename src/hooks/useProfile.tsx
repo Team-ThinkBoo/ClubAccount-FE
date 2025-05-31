@@ -2,7 +2,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { ChangePWRequestType, ChnageProfileType } from "@/types/mypage";
 import { FetchErrorType } from "@/types/types";
 import { queryClient } from "@/utils/http";
-import { getProfile, patchLink, patchPassword, patchProfile } from "@/utils/mypage";
+import { deleteProfile, getProfile, patchLink, patchPassword, patchProfile } from "@/utils/mypage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -72,6 +72,26 @@ export function usePatchProfile() {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success("프로필 정보가 변경되었습니다!");
+      navigate("/");
+    },
+    onError: (err) => {
+      toast.error(err.info?.message);
+    }
+  });
+
+  return {
+    mutate,
+    isError,
+    isPending
+  };
+}
+
+export function useDeleteProfile() {
+  const navigate = useNavigate();
+  const { mutate, isError, isPending } = useMutation<unknown, FetchErrorType>({
+    mutationFn: deleteProfile,
+    onSuccess: async () => {
+      toast.success("회원 탈퇴 성공");
       navigate("/");
     },
     onError: (err) => {

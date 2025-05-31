@@ -13,6 +13,7 @@ import { FetchErrorType } from "../../types/types";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../utils/login";
 import { useAuthStore } from "../../store/useAuthStore";
+import { toast } from "sonner";
 
 const Login = () => {
   const { errors: error, validateAndRun } = useValidator<LoginErrorType>();
@@ -25,13 +26,11 @@ const Login = () => {
   const { mutate: loginMutation } = useMutation<LoginResponseType, FetchErrorType, LoginType>({
     mutationFn: login,
     onSuccess: (data) => {
-      console.log("✅ 로그인 성공! 리다이렉트 실행");
-
       setAuth(data.accessToken, data.link);
       navigate("/");
     },
     onError: (err) => {
-      console.error("❌ 로그인 실패:", err);
+      toast.error(err.info?.message);
     }
   });
 

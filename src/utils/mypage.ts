@@ -76,3 +76,12 @@ export async function patchProfile(data: ChnageProfileType) {
     throw createFetchError(error, "프로필 수정 과정에서 오류가 발생하였습니다!");
   }
 }
+
+export async function deleteProfile() {
+  try {
+    const response = await api.delete(`${import.meta.env.VITE_API_BASE_URL}/v1/users`);
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "프로필 삭제 과정에서 오류가 발생하였습니다!");
+  }
+}

@@ -18,6 +18,7 @@ import ReceiptDetailsList from "./ReceiptDetailsList";
 import { queryClient } from "../../utils/http";
 import Capture from "@/components/Capture";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { toast } from "sonner";
 interface AddModalProps {
   type: AddModalType;
   open: boolean;
@@ -85,12 +86,12 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
       setPreview(null);
     },
     onError: (err) => {
-      alert(err);
+      toast.error(err.info?.message);
       setPreview(null);
     }
   });
 
-  const { mutate: createReceiptMutation } = useMutation<
+  const { mutate: createReceiptMutation, isPending } = useMutation<
     unknown,
     FetchErrorType,
     ReceiptRequestType
@@ -99,9 +100,10 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     onSuccess: () => {
       onCloseModal();
       queryClient.invalidateQueries({ queryKey: ["receipts"] });
+      queryClient.invalidateQueries({ queryKey: ["expenseChart"] });
     },
     onError: (err) => {
-      alert(err);
+      toast.error(err.info?.message);
     }
   });
 
@@ -113,7 +115,7 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
     if (file.size > MAX_SIZE_BYTES) {
-      alert(`파일 크기는 ${MAX_SIZE_MB}MB 이하만 업로드할 수 있습니다.`);
+      toast.error(`파일 크기는 ${MAX_SIZE_MB}MB 이하만 업로드할 수 있습니다.`);
       return;
     }
 
@@ -153,91 +155,90 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
     setValue((prev) => ({ ...prev, request: { ...prev.request, receiptItems: items } }));
   };
 
-  let classes =
-    "w-[312px] md:w-[368px] rounded-2xl bg-white flex flex-col justify-center items-center py-8 px-5 gap-6";
-
-  if (type === "self") {
-    classes += " h-[522px]";
-  } else {
-    classes += " h-[582px]";
-  }
-
   const handleShowDetiles = () => {
     setShowDetails((pre) => !pre);
   };
 
   return (
     <Modal open={open} onClose={onCloseModal}>
-      <form onSubmit={handleSubmit} className={classes}>
-        {!preview && !showDetails && (
-          <>
-            <h1 className="title-extra-18 text-gray-01">
-              {type === "self" ? "직접 등록하기" : "스캔으로 등록하기"}
-            </h1>
-            <div className="flex flex-col w-full gap-5 pt-4">
-              <div className="flex flex-col items-center w-full gap-3">
-                {type === "receipt" && <Capture onFileChange={handleFileChange} />}
-                <Selector
-                  selectTitle={"카테고리"}
-                  selectList={categoryKeys}
-                  dataTitle={(data) => CATEGORY[data]}
-                  dataValue={(data) => data}
-                  value={value.request.category}
-                  onChange={(e) => handleChangeValue("category", e)}
-                  name="category"
-                />
-                <Datepicker
-                  maxDate={new Date()}
-                  inputName="date"
-                  containerClassName="w-[272px] md:w-[312px] h-[41px] relative w-full text-gray-700"
-                  inputClassName="w-[272px] md:w-[312px] h-[41px] gap-1 px-4 border body-med-14 text-gray-01 rounded-xl border-gray-05 focus:outline-0"
-                  popoverDirection="down"
-                  readOnly
-                  i18n={"ko"}
-                  placeholder="날짜"
-                  useRange={false}
-                  asSingle={true}
-                  primaryColor="amber"
-                  value={date}
-                  onChange={(newValue) => {
-                    setDate(newValue);
-                    setValue((prev) => ({
-                      ...prev,
-                      request: {
-                        ...prev.request,
-                        date: formatDate(!newValue?.startDate ? null : new Date(newValue.startDate))
-                      }
-                    }));
-                  }}
-                />
-                <Input
-                  placeholder="상호명"
-                  name="store_name"
-                  value={value.request.businessName}
-                  onChange={(e) => handleChangeValue("businessName", e)}
-                />
-                <Input
-                  placeholder="금액"
-                  name="amount"
-                  type="number"
-                  className="appearance-none no-spinner"
-                  value={value.request.amount === 0 ? "" : value.request.amount}
-                  onChange={(e) => handleChangeValue("amount", e)}
-                />
-                <Input
-                  placeholder="메모"
-                  name="etc"
-                  value={value.request.etc}
-                  onChange={(e) => handleChangeValue("etc", e)}
-                />
-                <button
-                  type="button"
-                  onClick={handleShowDetiles}
-                  className="text-center underline cursor-pointer text-gray-03 body-med-14"
-                >
-                  영수증 상세내역
-                </button>
-                {error && <p className="text-red-400 caption-med-12">{error}</p>}
+      {isPending && <LoadingSpinner />}
+      <div className="w-[312px] md:w-[368px] h-[640px] rounded-2xl bg-white flex flex-col justify-center items-center py-8 px-5 gap-6">
+        <form
+          onSubmit={handleSubmit}
+          className="w-[312px] md:w-[368px] rounded-2xl bg-white flex flex-col justify-between items-center px-5 gap-6 h-[582px]"
+        >
+          {!preview && !showDetails && (
+            <>
+              <h1 className="title-extra-18 text-gray-01">
+                {type === "self" ? "직접 등록하기" : "스캔으로 등록하기"}
+              </h1>
+              <div className="flex flex-col w-full gap-5 pt-4">
+                <div className="flex flex-col items-center w-full gap-3">
+                  {type === "receipt" && <Capture onFileChange={handleFileChange} />}
+                  <Selector
+                    selectTitle={"카테고리"}
+                    selectList={categoryKeys}
+                    dataTitle={(data) => CATEGORY[data]}
+                    dataValue={(data) => data}
+                    value={value.request.category}
+                    onChange={(e) => handleChangeValue("category", e)}
+                    name="category"
+                  />
+                  <Datepicker
+                    maxDate={new Date()}
+                    inputName="date"
+                    containerClassName="w-[272px] md:w-[312px] h-[41px] relative w-full text-gray-700"
+                    inputClassName="w-[272px] md:w-[312px] h-[41px] gap-1 px-4 border body-med-14 text-gray-01 rounded-xl border-gray-05 focus:outline-0"
+                    popoverDirection="down"
+                    readOnly
+                    i18n={"ko"}
+                    placeholder="날짜"
+                    useRange={false}
+                    asSingle={true}
+                    primaryColor="amber"
+                    value={date}
+                    onChange={(newValue) => {
+                      setDate(newValue);
+                      setValue((prev) => ({
+                        ...prev,
+                        request: {
+                          ...prev.request,
+                          date: formatDate(
+                            !newValue?.startDate ? null : new Date(newValue.startDate)
+                          )
+                        }
+                      }));
+                    }}
+                  />
+                  <Input
+                    placeholder="상호명"
+                    name="store_name"
+                    value={value.request.businessName}
+                    onChange={(e) => handleChangeValue("businessName", e)}
+                  />
+                  <Input
+                    placeholder="금액"
+                    name="amount"
+                    type="number"
+                    className="appearance-none no-spinner"
+                    value={value.request.amount === 0 ? "" : value.request.amount}
+                    onChange={(e) => handleChangeValue("amount", e)}
+                  />
+                  <Input
+                    placeholder="메모"
+                    name="etc"
+                    value={value.request.etc}
+                    onChange={(e) => handleChangeValue("etc", e)}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleShowDetiles}
+                    className="text-center underline cursor-pointer text-gray-03 body-med-14"
+                  >
+                    영수증 상세내역
+                  </button>
+                  {error && <p className="text-red-400 caption-med-12">{error}</p>}
+                </div>
               </div>
               <footer className="flex flex-col w-full gap-3">
                 <button className="px-4 py-3 text-center rounded-lg bg-primary body-bold-16 text-gray-01">
@@ -251,28 +252,28 @@ const AddModal = ({ type, open, onCloseModal }: AddModalProps) => {
                   취소
                 </button>
               </footer>
-            </div>
-          </>
-        )}
-        {!preview && showDetails && (
-          <ReceiptDetailsList
-            receiptItems={value.request.receiptItems}
-            onBack={handleShowDetiles}
-            onUpdate={handleUpdateItems}
-          />
-        )}
-        {preview && (
-          <>
-            <img
-              src={preview}
-              alt="preview"
-              className="object-cover w-full border border-gray-300 rounded-lg"
+            </>
+          )}
+          {!preview && showDetails && (
+            <ReceiptDetailsList
+              receiptItems={value.request.receiptItems}
+              onBack={handleShowDetiles}
+              onUpdate={handleUpdateItems}
             />
-            <LoadingSpinner />
-            <p>영수증 정보를 인식중입니다.</p>
-          </>
-        )}
-      </form>
+          )}
+          {preview && (
+            <>
+              <img
+                src={preview}
+                alt="preview"
+                className="object-cover w-full border border-gray-300 rounded-lg"
+              />
+              <LoadingSpinner />
+              <p>영수증 정보를 인식중입니다.</p>
+            </>
+          )}
+        </form>
+      </div>
     </Modal>
   );
 };

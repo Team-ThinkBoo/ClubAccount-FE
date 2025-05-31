@@ -13,6 +13,7 @@ import {
 import { SignupErrorType, SignupType, VerifyCodeType, VerifyResponseType } from "../../types/auth";
 import { useValidator } from "../../hooks/useValidator";
 import { authIdSchema } from "../../utils/schemas";
+import { toast } from "sonner";
 
 interface EmailVerificationInputProps {
   data: SignupType;
@@ -43,12 +44,12 @@ const EmailVerificationInput = ({
     mutationFn: mode === "signup" ? checkDuplicateId : checkValidId,
     onSuccess: (data) => {
       verifyEmailMutation(data);
-      alert("이메일 인증 코드가 전송되었습니다!");
+      toast.success("이메일 인증 코드가 전송되었습니다!");
       setVerificationSent(true);
     },
     onError: (err) => {
       console.error("이메일 중복 확인 실패:", err);
-      alert(`${err.info?.message}`);
+      toast.error(`${err.info?.message}`);
     }
   });
 
@@ -57,7 +58,7 @@ const EmailVerificationInput = ({
     onSuccess: () => {},
     onError: (err) => {
       console.error("이메일 인증 실패:", err);
-      alert("이메일 인증 요청에 실패했습니다.");
+      toast.error("이메일 인증 요청에 실패했습니다.");
     }
   });
 
@@ -69,17 +70,17 @@ const EmailVerificationInput = ({
     mutationFn: checkVerificationEmail,
     onSuccess: (data) => {
       if (data.success) {
-        alert("인증이 완료되었습니다!");
+        toast.success("인증이 완료되었습니다!");
         onSuccess(true);
         setEmailInputDisabled(true);
       } else {
-        alert("인증번호가 잘못되었습니다!");
+        toast.error("인증번호가 잘못되었습니다!");
         onSuccess(false);
       }
     },
     onError: (err) => {
       console.error("이메일 인증 실패:", err);
-      alert("이메일 인증에 실패했습니다.");
+      toast.error("이메일 인증에 실패했습니다.");
     }
   });
 

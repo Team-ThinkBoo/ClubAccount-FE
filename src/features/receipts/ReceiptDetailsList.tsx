@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ReceiptItemsType } from "../../types/receipt";
 import ArrowLeftIcon from "../../icons/ArrowLeftIcon";
 import ReceiptDetailTable from "./ReceiptDetailTable";
+import AddIcon from "@/icons/AddIcon";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ReceiptDetailsListProps {
   receiptItems: ReceiptItemsType[];
@@ -12,6 +14,11 @@ interface ReceiptDetailsListProps {
 const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsListProps) => {
   const [items, setItems] = useState(receiptItems);
   const [error, setError] = useState(false);
+  const [mode, setMode] = useState<"normal" | "edit">("normal");
+
+  function handleMode() {
+    setMode((pre) => (pre === "edit" ? "normal" : "edit"));
+  }
 
   function handleAddMode() {
     setItems((prev) => [
@@ -71,20 +78,27 @@ const ReceiptDetailsList = ({ receiptItems, onBack, onUpdate }: ReceiptDetailsLi
           <ArrowLeftIcon className="cursor-pointer" />
         </button>
         <h1 className="flex-1 text-center title-extra-18 text-gray-01">영수증 상세내역</h1>
+        <button onClick={handleAddMode} type="button">
+          <AddIcon />
+        </button>
       </div>
-      <div className="flex flex-col w-full h-full overflow-scroll">
-        <ReceiptDetailTable
-          receipts={items}
-          mode="change"
-          onChange={handleChange}
-          onDelete={handleDelete}
-        />
+
+      <div className="flex flex-col items-end w-full gap-3">
+        <ScrollArea className="flex flex-col w-full h-[392px] border-[2px] border-gray-04">
+          <ReceiptDetailTable
+            receipts={items}
+            editMode={mode}
+            mode="change"
+            onChange={handleChange}
+            onDelete={handleDelete}
+          />
+        </ScrollArea>
         <button
-          onClick={handleAddMode}
           type="button"
-          className="w-full py-2 text-center body-med-14 bg-gray-05"
+          onClick={handleMode}
+          className="w-fit bg-warm-gray-02 text-gray-02 body-med-14 px-4 py-2 rounded-[8px]"
         >
-          상품 추가하기
+          {mode === "normal" ? "목록 편집" : "확인"}
         </button>
       </div>
       {error && <p className="text-red-400 caption-med-12">비어있는 항목을 모두 채워주세요!</p>}

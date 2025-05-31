@@ -84,13 +84,13 @@ const EditEmailPage = () => {
     mutationFn: checkDuplicateId,
     onSuccess: (data) => {
       verifyEmailMutation(data);
-      toast.success("📧 이메일 인증 코드가 전송되었습니다!");
+      toast.success("이메일 인증 코드가 전송되었습니다!");
       setActiveCode(true);
       setActiveEmail(false);
     },
     onError: (err) => {
       console.error("이메일 중복 확인 실패:", err);
-      toast.error(`📧 ${err.info?.message}`);
+      toast.error(`${err.info?.message}`);
     }
   });
 
@@ -99,7 +99,7 @@ const EditEmailPage = () => {
     onSuccess: () => {},
     onError: (err) => {
       console.error("이메일 인증 실패:", err);
-      alert("이메일 인증 요청에 실패했습니다.");
+      toast.error("이메일 인증 요청에 실패했습니다.");
     }
   });
 

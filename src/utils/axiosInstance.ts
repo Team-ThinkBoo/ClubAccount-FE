@@ -1,6 +1,7 @@
 // api/axiosInstance.ts
 import axios from "axios";
 import { AUTH_SEARCH_PARAMS } from "../constants/constants";
+import { toast } from "sonner";
 
 const instance = axios.create({
   baseURL: "",
@@ -42,7 +43,7 @@ instance.interceptors.response.use(
       } catch (refreshErr) {
         // 재발급 실패 → 로그아웃 처리 or 에러 전파
         localStorage.removeItem("accessToken");
-        alert("로그인상태가 만료되었습니다!");
+        toast.error("로그인상태가 만료되었습니다!");
         window.location.href = `/auth?mode=${AUTH_SEARCH_PARAMS.LOGIN}`;
         return Promise.reject(refreshErr);
       }

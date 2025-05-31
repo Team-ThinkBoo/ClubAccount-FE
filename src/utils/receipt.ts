@@ -120,3 +120,18 @@ export async function updateReceipt({ id, datas }: UpdateReceiptProps) {
     throw createFetchError(error, "영수증 업데이트 과정에서 오류가 발생하였습니다!");
   }
 }
+
+export async function deleteReceipt({ id }: { id: number }) {
+  try {
+    const response = await api.delete(`${import.meta.env.VITE_API_BASE_URL}/v1/receipts`, {
+      params: { receiptIds: id },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    return response.data;
+  } catch (error: unknown) {
+    throw createFetchError(error, "영수증 삭제 과정에서 오류가 발생하였습니다!");
+  }
+}

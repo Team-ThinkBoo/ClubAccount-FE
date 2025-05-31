@@ -1,9 +1,10 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { loadReceiptDetail, loadReceipts, updateReceipt } from "../utils/receipt";
+import { deleteReceipt, loadReceiptDetail, loadReceipts, updateReceipt } from "../utils/receipt";
 import { LoadReceiptsResponseType, ReceiptRequestType, ReceiptType } from "../types/receipt";
 import { LoginResponseType } from "../types/auth";
 import { FetchErrorType } from "../types/types";
 import { queryClient } from "../utils/http";
+import { toast } from "sonner";
 
 export function useLoadReceipts(
   link: LoginResponseType["link"],
@@ -53,11 +54,26 @@ export function useUpdateReceipt(link: LoginResponseType["link"], onSuccess?: ()
     onSuccess: () => {
       onSuccess?.();
       queryClient.invalidateQueries({ queryKey: ["receipts", link] });
+      queryClient.invalidateQueries({ queryKey: ["expenseChart"] });
     },
     onError: (err) => {
-      alert(err);
+      toast.error(err.info?.message);
     }
   });
 
   return { mutate, status };
+}
+
+export function useDeleteReceipt() {
+  return useMutation<unknown, FetchErrorType, { id: number }>({
+    mutationFn: deleteReceipt,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["receipts"] });
+      queryClient.invalidateQueries({ queryKey: ["expenseChart"] });
+      toast.success("영수증이 삭제되었습니다.");
+    },
+    onError: (err) => {
+      toast.error(err.info?.message);
+    }
+  });
 }
